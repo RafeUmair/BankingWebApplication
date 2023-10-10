@@ -177,7 +177,6 @@ namespace assignment2A_real.Data
             return userProfiles;
         }
 
-
         public static void UpdateUserProfile(string oldname, UserProfile userProfile)
         {
             try
@@ -191,9 +190,9 @@ namespace assignment2A_real.Data
                         DeleteUserProfile(oldname);
 
                         command.CommandText = @"
-                    UPDATE UserProfile
-                    SET Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password
-                    WHERE Name = @Name";
+                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password)
+                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password)";
+
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);
                         command.Parameters.AddWithValue("@Phone", userProfile.Phone);
@@ -223,7 +222,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Delete the user profile based on Name
                         command.CommandText = "DELETE FROM UserProfile WHERE Name = @Name";
                         command.Parameters.AddWithValue("@Name", name);
 
