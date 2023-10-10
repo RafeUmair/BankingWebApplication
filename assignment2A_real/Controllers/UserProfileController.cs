@@ -67,8 +67,8 @@ namespace assignment2A_real.Controllers
             }
 
             // Update the user profile
-            updatedUserProfile.Name = username; // Ensure the username is not changed
-            UserProfileManager.UpdateUserProfile(updatedUserProfile);
+            //updatedUserProfile.Name = username; // Ensure the username is not changed
+            UserProfileManager.UpdateUserProfile(username, updatedUserProfile);
 
             // Return a success response or appropriate status code
             return Ok("User profile updated successfully.");

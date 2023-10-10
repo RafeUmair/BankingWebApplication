@@ -2,6 +2,7 @@
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.Text;
+using System.Xml.Linq;
 
 namespace assignment2A_real.Data
 {
@@ -23,7 +24,7 @@ namespace assignment2A_real.Data
                     {
                         // SQL command to create the UserProfile table
                         command.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS UserProfile (
+                        CREATE TABLE IF NOT EXISTS UserProfile (
                         Name TEXT PRIMARY KEY,
                         Email TEXT,
                         Address TEXT,
@@ -177,7 +178,7 @@ namespace assignment2A_real.Data
         }
 
 
-        public static void UpdateUserProfile(UserProfile userProfile)
+        public static void UpdateUserProfile(string oldname, UserProfile userProfile)
         {
             try
             {
@@ -187,10 +188,11 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
+                        DeleteUserProfile(oldname);
+
                         command.CommandText = @"
-                    UPDATE UserProfile
-                    SET Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password
-                    WHERE Name = @Name";
+                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password)
+                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password)";
 
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);

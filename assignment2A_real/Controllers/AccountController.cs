@@ -26,16 +26,13 @@ namespace assignment2A_real.Controllers
         [HttpGet("/api/Accounts")]
         public IActionResult GetAllAccounts()
         {
-            // Retrieve all accounts from your data source
             List<Account> accounts = AccountManager.GetAllAccounts();
 
-            // Check if any accounts were found
             if (accounts.Count == 0)
             {
                 return NotFound("No accounts found.");
             }
 
-            // Return the list of accounts as JSON
             return Ok(accounts);
         }
 
@@ -55,32 +52,27 @@ namespace assignment2A_real.Controllers
         [HttpPut("{acctNo}")]
         public IActionResult UpdateAccount(int acctNo, Account updatedAccount)
         {
-            // Check if the account exists
             if (!AccountManager.AccountExists(acctNo))
             {
                 return NotFound("Account not found.");
             }
 
-            // Update the account
-            updatedAccount.AcctNo = acctNo; // Ensure AcctNo is not changed
-            AccountManager.UpdateAccount(updatedAccount);
-
-            return NoContent();
+            //updatedAccount.AcctNo = acctNo;
+            AccountManager.UpdateAccount(acctNo, updatedAccount);
+            return Content("updated account with newly entered values");
         }
 
         [HttpDelete("{acctNo}")]
         public IActionResult DeleteAccount(int acctNo)
         {
-            // Check if the account exists
             if (!AccountManager.AccountExists(acctNo))
             {
                 return NotFound("Account not found.");
             }
 
-            // Delete the account
             AccountManager.DeleteAccount(acctNo);
 
-            return NoContent();
+            return Content("deleted account: " + acctNo);
         }
     }
 }

@@ -134,6 +134,25 @@ namespace assignment2A_real.Data
             }
         }
 
+        public static bool TransactionExists(int transactionId)
+        {
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SQLiteCommand command = connection.CreateCommand())
+                {
+                    command.CommandText = "SELECT COUNT(*) FROM [Transaction] WHERE TransactionId = @TransactionId";
+                    command.Parameters.AddWithValue("@TransactionId", transactionId);
+                    int transactionIds = Convert.ToInt32(command.ExecuteScalar());
+
+                    connection.Close();
+
+                    return transactionIds > 0;
+                }
+            }
+        }
+
         public static void DeleteAllTransactions()
         {
             try

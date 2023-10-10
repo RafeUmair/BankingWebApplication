@@ -44,6 +44,11 @@ namespace assignment2A_real.Controllers
                 return NotFound("Account not found.");
             }
 
+            if(TransactionManager.TransactionExists(transaction.TransactionId))
+            {
+                return BadRequest("TransactionId already exists.");
+            }
+
             decimal newBalance = account.Bal + transaction.Amount;
 
             account.Bal = newBalance;
@@ -57,11 +62,8 @@ namespace assignment2A_real.Controllers
             };
 
             TransactionManager.InsertTransaction(depositTransaction);
-
             account.Transactions.Add(depositTransaction);
-
-            AccountManager.UpdateAccount(account);
-
+            AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Deposited {transaction.Amount:C} into account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
 
@@ -89,27 +91,25 @@ namespace assignment2A_real.Controllers
                 return BadRequest("Insufficient balance for withdrawal.");
             }
 
+            if(TransactionManager.TransactionExists(transaction.TransactionId))
+            {
+                return BadRequest("TransactionId already exists.");
+            }
+
+            decimal newBalance = account.Bal - transaction.Amount;
+            account.Bal = newBalance;
+
             Transaction withdrawalTransaction = new Transaction
             {
                 TransactionId = transaction.TransactionId,
                 Amount = -transaction.Amount,
                 AcctNo = transaction.AcctNo,
-                Type = "withdraw"
+                Type = "Withdraw"
             };
 
-            account.Transactions.Add(withdrawalTransaction);
-
-            // Update account balance
-            account.Bal -= transaction.Amount;
-
-            // Update the account and save changes to the database
-            AccountManager.UpdateAccount(account);
-
             TransactionManager.InsertTransaction(withdrawalTransaction);
-
             account.Transactions.Add(withdrawalTransaction);
-
-
+            AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Withdrawn {transaction.Amount:C} from account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
     }

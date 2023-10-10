@@ -146,7 +146,7 @@ namespace assignment2A_real.Data
             }
         }
 
-        public static void UpdateAccount(Account account)
+        public static void UpdateAccount(int oldAcctNo, Account updatedAccount)
         {
             try
             {
@@ -156,18 +156,16 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Update the account based on AcctNo
+                        DeleteAccount(oldAcctNo);
+
                         command.CommandText = @"
-                    UPDATE Account
-                    SET Bal = @Bal, Pin = @Pin, Fname = @Fname, Lname = @Lname
-                    WHERE AcctNo = @AcctNo";
-
-                        command.Parameters.AddWithValue("@Bal", account.Bal);
-                        command.Parameters.AddWithValue("@Pin", account.Pin);
-                        command.Parameters.AddWithValue("@Fname", account.Fname);
-                        command.Parameters.AddWithValue("@Lname", account.Lname);
-                        command.Parameters.AddWithValue("@AcctNo", account.AcctNo);
-
+                        INSERT INTO Account (AcctNo, Bal, Pin, Fname, Lname)
+                        VALUES (@NewAcctNo, @Bal, @Pin, @Fname, @Lname)";
+                        command.Parameters.AddWithValue("@NewAcctNo", updatedAccount.AcctNo);
+                        command.Parameters.AddWithValue("@Bal", updatedAccount.Bal);
+                        command.Parameters.AddWithValue("@Pin", updatedAccount.Pin);
+                        command.Parameters.AddWithValue("@Fname", updatedAccount.Fname);
+                        command.Parameters.AddWithValue("@Lname", updatedAccount.Lname);
                         command.ExecuteNonQuery();
                     }
 
@@ -190,7 +188,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Delete the account based on AcctNo
                         command.CommandText = "DELETE FROM Account WHERE AcctNo = @AcctNo";
                         command.Parameters.AddWithValue("@AcctNo", acctNo);
 
