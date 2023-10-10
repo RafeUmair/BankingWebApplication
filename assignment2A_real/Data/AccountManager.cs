@@ -336,7 +336,7 @@ namespace assignment2A_real.Data
             return transactions;
         }*/
 
-        public static Account GetAccountByAcctNo(int acctNo)
+        public static Account? GetAccountByAcctNo(int acctNo)
         {
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
