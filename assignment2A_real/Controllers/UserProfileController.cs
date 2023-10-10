@@ -18,6 +18,7 @@ namespace assignment2A_real.Controllers
         }
 
         [HttpPost]
+        [Route("createUserProfile")]
         public IActionResult CreateUserProfile(UserProfile userProfile)
         {
             // Insert the user profile into the database using UserProfileManager

@@ -10,7 +10,7 @@ namespace assignment2A_real.Controllers
     public class AccountController : ControllerBase
     {
         [HttpPost]
-        [Route("create")]
+        [Route("createAccount")]
         public ActionResult<Account> CreateAccount(Account account)
         {
             if (AccountManager.AccountExists(account.AcctNo))
