@@ -102,12 +102,13 @@ namespace assignment2A_real.Controllers
             // Update account balance
             account.Bal -= transaction.Amount;
 
+            account.Transactions.Add(withdrawalTransaction);
+
             // Update the account and save changes to the database
             AccountManager.UpdateAccount(account);
 
             TransactionManager.InsertTransaction(withdrawalTransaction);
 
-            account.Transactions.Add(withdrawalTransaction);
 
 
             return Ok($"Withdrawn {transaction.Amount:C} from account {transaction.AcctNo}. New balance: {account.Bal:C}");

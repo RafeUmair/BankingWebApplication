@@ -191,7 +191,6 @@ namespace assignment2A_real.Data
                     UPDATE UserProfile
                     SET Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password
                     WHERE Name = @Name";
-
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);
                         command.Parameters.AddWithValue("@Phone", userProfile.Phone);
@@ -357,7 +356,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Check if the user profile exists by username
                         command.CommandText = "SELECT COUNT(*) FROM UserProfile WHERE Name = @Username";
                         command.Parameters.AddWithValue("@Username", username);
 
@@ -390,11 +388,11 @@ namespace assignment2A_real.Data
                 var userProfile = new UserProfile
                 {
                     Name = name,
-                    Email = $"user{i}@example.com",
-                    Address = $"Address {i}",
+                    Email = GenerateRandomString() + "@example.com",
+                    Address = $"Address {i}" + GenerateRandomString(),
                     Phone = (long)random.Next(100000000, 1000000000),
-                    Picture = $"Picture {i}",
-                    Password = GenerateRandomPassword()
+                    Picture = GenerateRandomString() + ".png",
+                    Password = GenerateRandomString()
                 };
 
                 userProfiles.Add(userProfile);
@@ -402,7 +400,7 @@ namespace assignment2A_real.Data
             }
 
         }
-        public static String GenerateRandomPassword()
+        public static String GenerateRandomString()
         {
             string allowedChars = "1234567890qweasdzxcrtyfghbnmuiopjkl";
             Random random = new Random();
