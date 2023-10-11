@@ -9,8 +9,6 @@ namespace assignment2A_real.Controllers
     [ApiController]
     public class TransactionController : Controller
     {
-
-
         [HttpGet("/api/Transactions")]
         public IActionResult GetAllTransactions()
         {

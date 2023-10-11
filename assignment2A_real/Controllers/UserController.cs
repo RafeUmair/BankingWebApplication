@@ -6,13 +6,12 @@ namespace assignment2A_real.Controllers
 {
     public class UserController : Controller
     {
-
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
             UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
 
-            if (userProfile != null)
+            if (userProfile != null && userProfile.Type == "user")
             {
                 if (password == userProfile.Password)
                 {
@@ -33,6 +32,5 @@ namespace assignment2A_real.Controllers
         {
             return View("FailedLogin");
         }
-
     }
 }
