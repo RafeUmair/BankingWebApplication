@@ -14,9 +14,11 @@ namespace assignment2A_real.Models
             public string? Fname { get; set; }
             public string? Lname { get; set; }
 
-       // [ForeignKey("UserProfile")]
-      //  public string? Name { get; set; }
-        public List<Transaction> Transactions { get; set; } = new List<Transaction>();
+        // [ForeignKey("UserProfile")]
+        //  public string? Name { get; set; }
+
+         [ForeignKey("Transaction")]
+        public int TransactionId { get; set; }
 
 
     }

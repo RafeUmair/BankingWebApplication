@@ -237,7 +237,7 @@ namespace assignment2A_real.Data
                     {
                         TransactionId = random.Next(1, 10000),
                         Amount = Math.Round((decimal)(random.NextDouble() * 1000), 2),
-                        AcctNo = random.Next(10000, 99999),
+                        AcctNo = AccountManager.GetRandomAccount().AcctNo,
                         Type = transactionDescriptions[random.Next(transactionDescriptions.Length)]
                     };
 
@@ -255,7 +255,7 @@ namespace assignment2A_real.Data
             {
                 TransactionId = 1,
                 Amount = 1000,
-                AcctNo = 475431226,
+                AcctNo = AccountManager.GetRandomAccount().AcctNo,
                 Type = "Deposit"
 
             };
@@ -264,7 +264,7 @@ namespace assignment2A_real.Data
             {
                 TransactionId = 2,
                 Amount = 500,
-                AcctNo = 453221,
+                AcctNo = AccountManager.GetRandomAccount().AcctNo,
                 Type = "Deposit"
 
             };
@@ -273,7 +273,7 @@ namespace assignment2A_real.Data
             {
                 TransactionId = 3,
                 Amount = 500,
-                AcctNo = 45343221,
+                AcctNo = AccountManager.GetRandomAccount().AcctNo,
                 Type = "Withdraw"
 
             };
@@ -282,7 +282,7 @@ namespace assignment2A_real.Data
             {
                 TransactionId = 4,
                 Amount = 20400,
-                AcctNo = 14434,
+                AcctNo = AccountManager.GetRandomAccount().AcctNo,
                 Type = "Deposit"
 
             };
@@ -301,6 +301,20 @@ namespace assignment2A_real.Data
                 LoadSampleTransactionData();
             }
 
+        }
+
+        public static Transaction GetRandomTransaction()
+        {
+            List<Transaction> allTransactions = GetAllTransactions();
+
+            if (allTransactions.Count > 0)
+            {
+                var random = new Random();
+                int randomIndex = random.Next(0, allTransactions.Count);
+                return allTransactions[randomIndex];
+            }
+
+            return null;
         }
     }
 }

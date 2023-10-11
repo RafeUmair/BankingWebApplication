@@ -429,7 +429,7 @@ namespace assignment2A_real.Data
         {
             if (CreateUserProfileTable())
             {
-               DeleteAllUserProfiles();
+              // DeleteAllUserProfiles();
                LoadSampleUserProfileData();
             }
         }

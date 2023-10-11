@@ -66,29 +66,10 @@ namespace assignment2A_real.Data
             foreach (var account in sampleAccounts)
             {
                 Insert(account);
-
-                // Insert transactions for the account
-               // LoadSampleTransactionData(account.AcctNo);
             }
 
             Console.WriteLine("Sample account data loaded successfully.");
         }
-        /*   public static void LoadSampleTransactionData(int acctNo)
-           {
-               List<assignment2A_real.Models.Transaction> sampleTransactions = new List<assignment2A_real.Models.Transaction>
-       {
-           new assignment2A_real.Models.Transaction { TransactionId = 1, Amount = 1000, AcctNo = acctNo },
-           new assignment2A_real.Models.Transaction { TransactionId = 2, Amount = -500, AcctNo = acctNo },
-           new assignment2A_real.Models.Transaction { TransactionId = 3, Amount = 500, AcctNo = acctNo }
-       };
-
-               foreach (var transaction in sampleTransactions)
-               {
-                   TransactionManager.InsertTransaction(transaction);
-               }
-
-               Console.WriteLine($"Sample transactions loaded for Account {acctNo}.");
-           }*/
 
 
         public static void Insert(Account account)
@@ -262,7 +243,6 @@ namespace assignment2A_real.Data
                                     Fname = reader.GetString(reader.GetOrdinal("Fname")),
                                     Lname = reader.GetString(reader.GetOrdinal("Lname"))
 
-
                                 };
                              //   account.Transactions = GetTransactionsForAccount(account.AcctNo);
                                 accounts.Add(account);
@@ -385,7 +365,7 @@ namespace assignment2A_real.Data
         {
             if (CreateAccountTable())
             {
-               // DeleteAllAccounts(); // Delete all previous accounts
+                DeleteAllAccounts(); // Delete all previous accounts
                 LoadSampleAccountData();
             }
         }
