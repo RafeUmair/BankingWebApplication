@@ -10,7 +10,7 @@ namespace assignment2A_real.Models
         [Key]
         public string? Name { get; set; }
         public string? Address { get; set; }
-        public long Phone { get; set; }
+        public long? Phone { get; set; }
         public string? Picture { get; set; }
         public string? Password { get; set; }
 
