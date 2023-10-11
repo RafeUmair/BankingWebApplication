@@ -4,9 +4,22 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p></p>
 <p>Access gained, @Model.Name!</p>
 <p>Email: @Model.Email</p>
 <p>Address: @Model.Address</p>
 <p>Phone: @Model.Phone</p>
 <p>Picture: @Model.Picture</p>
+
+<!-- Button to load User Management page -->
+<form method="get" action="/Admin/UserManagement">
+    <button type="submit" class="btn btn-success">User Management</button>
+</form>
+
+<!-- Button for logout (you may need to implement the logout action) -->
+<form method="post" action="/Home/Admin">
+    <button type="submit" class="btn btn-danger">Logout</button>
+</form>
+
+<form method="get" action="/Admin/EditProfile">
+    <button type="submit" class="btn btn-primary">Edit Profile</button>
+</form>

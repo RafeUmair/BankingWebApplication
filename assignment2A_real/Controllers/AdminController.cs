@@ -15,7 +15,9 @@ namespace assignment2A_real.Controllers
             {
                 if (password == userProfile.Password)
                 {
-                    TempData["Message"] = userProfile.Name; // Store in TempData
+                    TempData["Message"] = userProfile.Name;
+                    TempData["Message2"] = userProfile.Name;
+
                     return RedirectToAction("LoggedIn");
                 }
             }
@@ -34,6 +36,26 @@ namespace assignment2A_real.Controllers
         public IActionResult FailedLogin()
         {
             return View("FailedLoginAdmin");
+        }
+
+        public IActionResult UserManagement()
+        {
+            var userProfiles = UserProfileManager.GetAllUserProfiles();
+            return View("UserManagement", userProfiles);
+        }
+
+        public IActionResult EditProfile(string username)
+        {
+            ViewBag.Message2 = TempData["Message2"] as string;
+
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message2);
+
+            if (userProfile != null)
+            {
+                return View("EditProfile", userProfile);
+            }
+
+            return NotFound();
         }
     }
 }

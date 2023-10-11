@@ -1,14 +1,18 @@
-﻿@{
+﻿@model UserProfile // Make sure you are using the appropriate model
+
+@{
     ViewData["Title"] = "User Profile";
-    string userName = ViewBag.Message; 
+    string userName = ViewBag.Message;
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<p></p>
 <p>Welcome you have successfully logged in, @Model.Name!</p>
 <p>Email: @Model.Email</p>
 <p>Address: @Model.Address</p>
 <p>Phone: @Model.Phone</p>
 <p>Picture: @Model.Picture</p>
 
+<form method="post" action="/Home/User">
+    <button type="submit" class="btn btn-primary">Logout</button>
+</form>
