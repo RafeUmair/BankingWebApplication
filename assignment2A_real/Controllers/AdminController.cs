@@ -6,6 +6,7 @@ namespace assignment2A_real.Controllers
 {
     public class AdminController : Controller
     {
+        [HttpPost]
         public IActionResult Login(string username, string password)
         {
             UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
@@ -24,12 +25,12 @@ namespace assignment2A_real.Controllers
 
         public IActionResult LoggedIn()
         {
-            return View("LoggedIn");
+            return View("LoggedInAdmin");
         }
 
         public IActionResult FailedLogin()
         {
-            return View("FailedLogin");
+            return View("FailedLoginAdmin");
         }
     }
 }
