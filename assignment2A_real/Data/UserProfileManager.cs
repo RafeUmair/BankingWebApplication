@@ -33,8 +33,7 @@ namespace assignment2A_real.Data
                         Password TEXT,
                         Type TEXT,
                         AccountNo INTEGER -- Add Accounts column
-                    )";
-
+                        )";
                         // Execute the SQL command to create the table
                         command.ExecuteNonQuery();
                         connection.Close();
@@ -118,7 +117,7 @@ namespace assignment2A_real.Data
                         command.Parameters.AddWithValue("@Phone", userProfile.Phone);
                         command.Parameters.AddWithValue("@Picture", userProfile.Picture);
                         command.Parameters.AddWithValue("@Password", userProfile.Password);
-                        command.Parameters.AddWithValue("@AccountNo", userProfile.AcctNo); // Assuming Accounts is now an integer
+                        command.Parameters.AddWithValue("@AccountNo", userProfile.AcctNo); 
                         command.Parameters.AddWithValue("@Type", userProfile.Type);
                         command.ExecuteNonQuery();
                     }

@@ -15,6 +15,7 @@ namespace assignment2A_real.Controllers
             {
                 if (password == userProfile.Password)
                 {
+                    TempData["Message"] = userProfile.Name; // Store in TempData
                     return RedirectToAction("LoggedIn");
                 }
             }
@@ -25,7 +26,9 @@ namespace assignment2A_real.Controllers
 
         public IActionResult LoggedIn()
         {
-            return View("LoggedInAdmin");
+            ViewBag.Message = TempData["Message"] as string;
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
+            return View("LoggedInAdmin", userProfile);
         }
 
         public IActionResult FailedLogin()

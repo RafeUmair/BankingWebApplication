@@ -1,4 +1,5 @@
-﻿using assignment2A_real.Models;
+﻿using assignment2A_real.Data;
+using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -31,9 +32,10 @@ namespace assignment2A_real.Controllers
 
         public IActionResult User()
         {
+            ViewBag.Message = TempData["Message"] as string;
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
             return View();
         }
-
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

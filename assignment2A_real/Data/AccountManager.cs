@@ -29,7 +29,7 @@ namespace assignment2A_real.Data
                     using (SQLiteCommand accountCommand = connection.CreateCommand())
                     {
                         accountCommand.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS Account (
+                        CREATE TABLE IF NOT EXISTS Account (
                         AcctNo INTEGER PRIMARY KEY,
                         Bal INTEGER,
                         Pin INTEGER,
