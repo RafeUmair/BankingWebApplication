@@ -5,8 +5,6 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "assignment2A_real", "assignment2A_real\assignment2A_real.csproj", "{AB7F1E11-DBA9-4052-9361-A1F16BB20293}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BankWebApplication", "BankWebApplication\BankWebApplication.csproj", "{495B2718-BCF6-4788-B387-0B8BB72DE4AE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{AB7F1E11-DBA9-4052-9361-A1F16BB20293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB7F1E11-DBA9-4052-9361-A1F16BB20293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB7F1E11-DBA9-4052-9361-A1F16BB20293}.Release|Any CPU.Build.0 = Release|Any CPU
-		{495B2718-BCF6-4788-B387-0B8BB72DE4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{495B2718-BCF6-4788-B387-0B8BB72DE4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{495B2718-BCF6-4788-B387-0B8BB72DE4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{495B2718-BCF6-4788-B387-0B8BB72DE4AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

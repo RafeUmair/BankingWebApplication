@@ -1,0 +1,74 @@
+﻿@model List<assignment2A_real.Models.UserProfile>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>User List</h2>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Password</th>
+        <th>AcctNo</th>
+
+        <th>Action</th>
+    </tr>
+    @foreach (var user in Model)
+    {
+        <tr>
+            <td>@user.Name</td>
+            <td>@user.Email</td>
+             <td>@user.Phone</td>
+            <td>@user.Password</td>
+            <td>@user.AcctNo</td>
+            <td>
+                <button onclick="editUser('@user.Name')">Edit</button>
+                <button onclick="deactivateUser('@user.Name')">Deactivate</button>
+            </td>
+        </tr>
+    }
+</table>
+
+<h2>Create User</h2>
+<form method="post" action="/Admin/CreateUser">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required />
+
+    <label for="phone">Phone:</label>
+    <input type="tel" id="phone" name="phone" required />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+
+    <label for="acctNo">Account Number:</label>
+    <input type="text" id="acctNo" name="acctNo" required />
+
+
+    <button type="submit">Create User</button>
+</form>
+
+<h2>Search Users</h2>
+<form method="get" action="/Admin/SearchUsers">
+    <input type="text" id="searchTerm" name="searchTerm" placeholder="Search by name or email" />
+    <button type="submit">Search</button>
+</form>
+
+<script>
+    function editUser(userId) {
+        // Implement user editing logic (e.g., open a modal or navigate to an edit page)
+    }
+
+    function deactivateUser(userId) {
+        // Implement user deactivation logic (e.g., confirm deactivation and update user status)
+    }
+</script>
