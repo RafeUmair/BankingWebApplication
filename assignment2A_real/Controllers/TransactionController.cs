@@ -60,7 +60,7 @@ namespace assignment2A_real.Controllers
             };
 
             TransactionManager.InsertTransaction(depositTransaction);
-            account.Transactions.Add(depositTransaction);
+            account.TransactionId = depositTransaction.TransactionId;
             AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Deposited {transaction.Amount:C} into account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
@@ -106,7 +106,7 @@ namespace assignment2A_real.Controllers
             };
 
             TransactionManager.InsertTransaction(withdrawalTransaction);
-            account.Transactions.Add(withdrawalTransaction);
+           account.TransactionId = withdrawalTransaction.TransactionId;
             AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Withdrawn {transaction.Amount:C} from account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
