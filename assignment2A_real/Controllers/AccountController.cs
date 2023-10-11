@@ -9,8 +9,6 @@ namespace assignment2A_real.Controllers
 
     public class AccountController : Controller
     {
-
-
         [HttpPost]
         [Route("createAccount")]
         public ActionResult<Account> CreateAccount(Account account)

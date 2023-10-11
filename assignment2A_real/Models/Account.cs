@@ -19,9 +19,6 @@ namespace assignment2A_real.Models
 
          [ForeignKey("Transaction")]
         public int TransactionId { get; set; }
-
-
     }
-
 }
 

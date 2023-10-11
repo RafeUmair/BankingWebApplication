@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace assignment2A_real.Models
 {
     public class UserProfile
-    {   
-        
+    {
+
         public string? Email { get; set; }
         [Key]
         public string? Name { get; set; }
@@ -17,6 +17,5 @@ namespace assignment2A_real.Models
         [ForeignKey("Account")]
         public int AcctNo { get; set; }
         public string? Type { get; set; }
-        public Boolean isLoggedin { get; set; }
     }
 }

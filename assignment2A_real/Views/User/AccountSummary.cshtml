@@ -1,0 +1,21 @@
+﻿@model assignment2A_real.Models.Account
+
+@{
+    ViewData["Title"] = "Account Summary";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p></p>
+@if (Model != null)
+{
+    <p>Account Number: @Model.AcctNo</p>
+    <p>Pin: @Model.Pin</p>
+    <p>First Name: @Model.Fname</p>
+    <p>Last Name: @Model.Lname</p>
+    <p>Balance: @Model.Bal</p>
+}
+else
+{
+    <p>Account not found.</p>
+}

@@ -1,6 +1,7 @@
-﻿@{
+﻿@model assignment2A_real.Models.UserProfile
+
+@{
     ViewData["Title"] = "User Profile";
-    string userName = ViewBag.Message; 
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -11,4 +12,9 @@
 <p>Address: @Model.Address</p>
 <p>Phone: @Model.Phone</p>
 <p>Picture: @Model.Picture</p>
+<p>AcctNo: @Model.AcctNo</p>
 
+<form method="post" action="/User/AccountSummary">
+    <input type="hidden" name="acctNo" value="@Model.AcctNo">
+    <button type="submit" class="btn btn-primary">Account Summary</button>
+</form>

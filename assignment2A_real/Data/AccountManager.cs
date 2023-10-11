@@ -301,7 +301,7 @@ namespace assignment2A_real.Data
                         }
                         else
                         {
-                            return null; // Account not found
+                            return null; 
                         }
                     }
                 }

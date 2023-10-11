@@ -15,7 +15,7 @@ namespace assignment2A_real.Controllers
             {
                 if (password == userProfile.Password)
                 {
-                    TempData["Message"] = userProfile.Name; 
+                    TempData["Message"] = userProfile.Name;
                     return RedirectToAction("LoggedIn");
                 }
             }
@@ -28,13 +28,18 @@ namespace assignment2A_real.Controllers
         {
             ViewBag.Message = TempData["Message"] as string;
             UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
-            userProfile.isLoggedin = true;
             return View("LoggedIn", userProfile);
         }
 
         public IActionResult FailedLogin()
         {
             return View("FailedLogin");
+        }
+
+        public IActionResult AccountSummary(int acctNo)
+        {
+            Account account = AccountManager.GetAccountByAcctNo(acctNo);
+            return View("AccountSummary", account);
         }
     }
 }
