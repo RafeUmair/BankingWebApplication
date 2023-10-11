@@ -4,12 +4,14 @@ using System.Data.Entity;
 
 namespace assignment2A_real.Controllers
 {
-    public class DataSeedController : ControllerBase
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DataSeedController : Controller
     {
 
 
         [HttpGet]
-        [Route("create")]
+        [Route("Seed")]
 
         public IActionResult StartSeed()
         {

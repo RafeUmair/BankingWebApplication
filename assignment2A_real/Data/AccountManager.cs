@@ -39,18 +39,6 @@ namespace assignment2A_real.Data
                     )";
                         accountCommand.ExecuteNonQuery();
                     }
-
-                 using (SQLiteCommand transactionCommand = connection.CreateCommand())
-                    {
-                        transactionCommand.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS Transaction (
-                        TransactionId INTEGER PRIMARY KEY,
-                        AcctNo INTEGER,
-                        Amount DECIMAL,
-                        FOREIGN KEY(AcctNo) REFERENCES Account(AcctNo)
-                    )";
-                        transactionCommand.ExecuteNonQuery();
-                    } 
                 
                     connection.Close();
                 }
@@ -274,6 +262,7 @@ namespace assignment2A_real.Data
                                     Fname = reader.GetString(reader.GetOrdinal("Fname")),
                                     Lname = reader.GetString(reader.GetOrdinal("Lname"))
 
+
                                 };
                              //   account.Transactions = GetTransactionsForAccount(account.AcctNo);
                                 accounts.Add(account);
@@ -291,50 +280,19 @@ namespace assignment2A_real.Data
 
             return accounts;
         }
-
-       
-     /*   public static List<assignment2A_real.Models.Transaction> GetTransactionsForAccount(int acctNo)
+        public static Account GetRandomAccount()
         {
-            List<assignment2A_real.Models.Transaction> transactions = new List<assignment2A_real.Models.Transaction>();
+            List<Account> allAccounts = GetAllAccounts();
 
-            try
+            if (allAccounts.Count > 0)
             {
-                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
-                {
-                    connection.Open();
-
-                    using (SQLiteCommand command = connection.CreateCommand())
-                    {
-                        // Retrieve transactions for the specified account
-                        command.CommandText = "SELECT * FROM \"Transaction\" WHERE AcctNo = @AcctNo";
-                        command.Parameters.AddWithValue("@AcctNo", acctNo);
-
-                        using (SQLiteDataReader reader = command.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                assignment2A_real.Models.Transaction transaction = new assignment2A_real.Models.Transaction
-                                {
-                                    TransactionId = reader.GetInt32(reader.GetOrdinal("TransactionId")),
-                                    Amount = reader.GetDecimal(reader.GetOrdinal("Amount")),
-                                    AcctNo = reader.GetInt32(reader.GetOrdinal("AcctNo"))
-                                };
-
-                                transactions.Add(transaction);
-                            }
-                        }
-                    }
-
-                    connection.Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error: " + ex.Message);
+                var random = new Random();
+                int randomIndex = random.Next(0, allAccounts.Count);
+                return allAccounts[randomIndex];
             }
 
-            return transactions;
-        }*/
+            return null; 
+        }
 
         public static Account? GetAccountByAcctNo(int acctNo)
         {
@@ -427,7 +385,7 @@ namespace assignment2A_real.Data
         {
             if (CreateAccountTable())
             {
-                DeleteAllAccounts(); // Delete all previous accounts
+               // DeleteAllAccounts(); // Delete all previous accounts
                 LoadSampleAccountData();
             }
         }

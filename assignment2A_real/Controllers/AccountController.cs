@@ -7,8 +7,10 @@ namespace assignment2A_real.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class AccountController : ControllerBase
+    public class AccountController : Controller
     {
+
+
         [HttpPost]
         [Route("createAccount")]
         public ActionResult<Account> CreateAccount(Account account)
@@ -75,6 +77,7 @@ namespace assignment2A_real.Controllers
             return Content("deleted account: " + acctNo);
         }
     }
+
 }
     
 

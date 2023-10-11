@@ -7,7 +7,7 @@ namespace assignment2A_real.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TransactionController : ControllerBase
+    public class TransactionController : Controller
     {
 
 
@@ -19,7 +19,7 @@ namespace assignment2A_real.Controllers
 
               if (transactions.Count == 0)
                 {
-              return NotFound("No Transactions found.");
+              return NotFound("No Transactions found."); 
               }
 
             return Ok(transactions); 

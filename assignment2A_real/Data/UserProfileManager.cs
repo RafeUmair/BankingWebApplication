@@ -24,13 +24,14 @@ namespace assignment2A_real.Data
                     {
                         // SQL command to create the UserProfile table
                         command.CommandText = @"
-                        CREATE TABLE IF NOT EXISTS UserProfile (
+                        CREATE TABLE UserProfile (
                         Name TEXT PRIMARY KEY,
                         Email TEXT,
                         Address TEXT,
                         Phone INTEGER,
                         Picture TEXT,
-                        Password TEXT
+                        Password TEXT,
+                        AccountNo INTEGER -- Add Accounts column
                     )";
 
                         // Execute the SQL command to create the table
@@ -47,9 +48,9 @@ namespace assignment2A_real.Data
                 return false; // Create table failed
             }
         }
-        public static void LoadSampleUserProfileData()
+            public static void LoadSampleUserProfileData()
             {
-                List<UserProfile> sampleUserProfiles = new List<UserProfile>
+                  List<UserProfile> sampleUserProfiles = new List<UserProfile>
         {
             new UserProfile
             {
@@ -58,7 +59,8 @@ namespace assignment2A_real.Data
                 Address = "123 Main St",
                 Phone = 5551234567,
                 Picture = "john.jpg",
-                Password = "password123"
+                Password = "password123",
+
             },
             new UserProfile
             {
@@ -67,7 +69,7 @@ namespace assignment2A_real.Data
                 Address = "456 Elm St",
                 Phone = 5559876543,
                 Picture = "jane.jpg",
-                Password = "password456"
+                Password = "password456",
             },
             new UserProfile
             {
@@ -76,17 +78,24 @@ namespace assignment2A_real.Data
                 Address = "789 Oak St",
                 Phone = 5555555555,
                 Picture = "alice.jpg",
-                Password = "password789"
+                Password = "password789",
+         
+
             }
+
         };
 
-            foreach (var userProfile in sampleUserProfiles)
-            {
-                InsertUserProfile(userProfile);
-            }
-
-            Console.WriteLine("Sample user profile data loaded successfully.");
-        }
+                foreach (var userProfile in sampleUserProfiles)
+                {
+                    Account account = AccountManager.GetRandomAccount();
+                    if (account != null)
+                    {
+                        userProfile.AcctNo = account.AcctNo;
+                        InsertUserProfile(userProfile);
+                    }
+                }
+                Console.WriteLine("Sample user profile data loaded successfully");
+    }
 
         public static void InsertUserProfile(UserProfile userProfile)
         {
@@ -98,25 +107,17 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        command.CommandText = "SELECT COUNT(*) FROM UserProfile WHERE Name = @Name";
-                        command.Parameters.AddWithValue("@Name", userProfile.Name);
-                        int existingProfileCount = Convert.ToInt32(command.ExecuteScalar());
-
-                        if (existingProfileCount > 0)
-                        {
-                            Console.WriteLine($"A user profile with Name {userProfile.Name} already exists.");
-                            return; 
-                        }
-
                         command.CommandText = @"
-                            INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password)
-                            VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password)";
+                   INSERT OR IGNORE INTO UserProfile (Name, Email, Address, Phone, Picture, Password, AccountNo)
+                   VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @AccountNo)";
 
+                        command.Parameters.AddWithValue("@Name", userProfile.Name); 
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);
                         command.Parameters.AddWithValue("@Phone", userProfile.Phone);
                         command.Parameters.AddWithValue("@Picture", userProfile.Picture);
                         command.Parameters.AddWithValue("@Password", userProfile.Password);
+                        command.Parameters.AddWithValue("@AccountNo", userProfile.AcctNo); // Assuming Accounts is now an integer
 
                         command.ExecuteNonQuery();
                     }
@@ -129,7 +130,6 @@ namespace assignment2A_real.Data
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
-
         public static IEnumerable<UserProfile> GetAllUserProfiles()
         {
             List<UserProfile> userProfiles = new List<UserProfile>();
@@ -156,7 +156,9 @@ namespace assignment2A_real.Data
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)(reader["Phone"]),
                                     Picture = reader["Picture"].ToString(),
-                                    Password = reader["Password"].ToString()
+                                    Password = reader["Password"].ToString(),
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"]) // Parse "Accounts" as an integer
+
                                 };
 
                                 userProfiles.Add(userProfile);
@@ -190,8 +192,8 @@ namespace assignment2A_real.Data
                         DeleteUserProfile(oldname);
 
                         command.CommandText = @"
-                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password)
-                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password)";
+                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password, Accounts)
+                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @Accounts)";
 
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);
@@ -199,6 +201,8 @@ namespace assignment2A_real.Data
                         command.Parameters.AddWithValue("@Picture", userProfile.Picture);
                         command.Parameters.AddWithValue("@Password", userProfile.Password);
                         command.Parameters.AddWithValue("@Name", userProfile.Name);
+                        command.Parameters.AddWithValue("@Accounts", userProfile.AcctNo);
+
 
                         command.ExecuteNonQuery();
                     }
@@ -286,7 +290,8 @@ namespace assignment2A_real.Data
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)(reader["Phone"]),
                                     Picture = reader["Picture"].ToString(),
-                                    Password = reader["Password"].ToString()
+                                    Password = reader["Password"].ToString(),
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"]) 
                                 };
                             }
                             else
@@ -393,7 +398,8 @@ namespace assignment2A_real.Data
                     Address = $"Address {i}" + GenerateRandomString(),
                     Phone = (long)random.Next(100000000, 1000000000),
                     Picture = GenerateRandomString() + ".png",
-                    Password = GenerateRandomString()
+                    Password = GenerateRandomString(),
+                    AcctNo = AccountManager.GetRandomAccount().AcctNo
                 };
 
                 userProfiles.Add(userProfile);

@@ -9,10 +9,9 @@ namespace assignment2A_real.Models
         public int TransactionId { get; set; } 
         public decimal Amount { get; set; }
 
-      [ForeignKey("Account")]
+        [ForeignKey("Account")]
         public int AcctNo { get; set; }
         public string? Type { get; set; }
-
 
     }
 }

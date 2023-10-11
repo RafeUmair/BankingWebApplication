@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\assignment2A_real\assignment2A_real.csproj" />
+  </ItemGroup>
+
 </Project>
