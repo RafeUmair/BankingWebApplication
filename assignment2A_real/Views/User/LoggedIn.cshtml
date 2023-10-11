@@ -1,7 +1,8 @@
 ﻿@{
     ViewData["Title"] = "Logged In";
+    string userName = ViewBag.Message; // Use "Message" instead of "message"
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<p>You have successfully logged in.</p>
+<p>You have successfully logged in, @userName.</p>
