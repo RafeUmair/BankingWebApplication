@@ -85,7 +85,7 @@ namespace assignment2A_real.Controllers
             if (userProfile != null)
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
-                return RedirectToAction("LoggedIn", new { username = userProfile.Name });
+                return View("DetailChange");
             }
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";
