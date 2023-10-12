@@ -76,12 +76,11 @@ namespace assignment2A_real.Controllers
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
 
-                ViewData["Title"] = "Profile Successfully Saved for Admin :" + userProfile.Name;
-                ViewData["Message"] = "Profile successfully saved for :  "+ userProfile.Name;
+
                 return View("AdminProfileSaved");
             }
 
-            ViewData["ErrorMessage"] = "Failed to update the profile.";
+            ViewData["ErrorMessage"] = "Failed to update the profile";
             return View("Error");
         }
     }
