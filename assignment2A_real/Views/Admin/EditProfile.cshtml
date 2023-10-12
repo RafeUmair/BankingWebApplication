@@ -4,17 +4,28 @@
     ViewData["Title"] = "Edit Profile";
 }
 
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
 <h1>@ViewData["Title"]</h1>
 
 <form method="post" asp-action="UpdateProfile">
     <div class="form-group">
         <label asp-for="Name">Name:</label>
-        <input asp-for="Name" class="form-control" required />
+        <input asp-for="Name" class="form-control" readonly />
     </div>
 
     <div class="form-group">
         <label asp-for="Email">Email:</label>
         <input asp-for="Email" class="form-control" required />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address">Address:</label>
+        <input asp-for="Address" class="form-control" />
     </div>
 
     <div class="form-group">
@@ -25,6 +36,18 @@
     <div class="form-group">
         <label asp-for="Password">Password:</label>
         <input asp-for="Password" class="form-control" required />
+    </div>
+
+    <div class="form-group hidden">
+        <label>Type:</label>
+        <span>Type Value</span>
+        <input type="hidden" asp-for="Type" />
+    </div>
+
+    <div class="form-group hidden">
+        <label>Picture:</label>
+        <span>Picture Value</span>
+        <input type="hidden" asp-for="Picture" />
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>

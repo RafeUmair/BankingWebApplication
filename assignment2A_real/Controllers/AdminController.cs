@@ -74,11 +74,11 @@ namespace assignment2A_real.Controllers
         {
             if (userProfile != null)
             {
-                // Simply update the user's profile with the new values.
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
 
-                // Redirect back to the LoggedIn action with the username as a route parameter
-                return RedirectToAction("LoggedIn", new { username = userProfile.Name });
+                ViewData["Title"] = "Profile Successfully Saved for Admin :" + userProfile.Name;
+                ViewData["Message"] = "Profile successfully saved for :  "+ userProfile.Name;
+                return View("AdminProfileSaved");
             }
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";
