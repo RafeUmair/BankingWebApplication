@@ -1,0 +1,22 @@
+﻿@model assignment2A_real.Models.Account
+
+<h2>Transfer Funds</h2>
+
+@using (Html.BeginForm("Send", "User", FormMethod.Post))
+{
+    <div class="form-group">
+        <label for="sourceAcctNo">Source Account:</label>
+        @Html.DisplayFor(model => model.AcctNo)
+        @Html.Hidden("sourceAcctNo", @Model.AcctNo)
+    </div>
+    <div class="form-group">
+        <label for="destinationAcctNo">Destination Account:</label>
+        @Html.TextBox("destinationAcctNo", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount:</label>
+        @Html.TextBox("amount", null, new { @class = "form-control" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Transfer Funds</button>
+}

@@ -261,6 +261,57 @@ namespace assignment2A_real.Data
             return transactions;
         }
 
+        public static void SendFunds(int sourceAcctNo, int destinationAcctNo, decimal amount)
+        {
+            var sourceAccount = AccountManager.GetAccountByAcctNo(sourceAcctNo);
+            var destinationAccount = AccountManager.GetAccountByAcctNo(destinationAcctNo);
+
+            if (sourceAccount == null || destinationAccount == null)
+            {
+                Console.WriteLine("Source or destination account not found.");
+                return;
+            }
+
+            if (sourceAccount.Bal < amount)
+            {
+                Console.WriteLine("Insufficient funds in the source account.");
+                return;
+            }
+
+            var transactionId = GenerateRandomTransactionId();
+
+            var sourceTransaction = new Transaction
+            {
+                TransactionId = transactionId,
+                Amount = -amount,  // Withdrawal
+                AcctNo = sourceAcctNo,
+                Type = "Send"
+            };
+
+            var destinationTransaction = new Transaction
+            {
+                TransactionId = transactionId,
+                Amount = amount,  // Deposit
+                AcctNo = destinationAcctNo,
+                Type = "Send"
+            };
+
+            sourceAccount.Bal -= amount;
+            destinationAccount.Bal += amount;
+
+            InsertTransaction(sourceTransaction);
+            InsertTransaction(destinationTransaction);
+
+            AccountManager.UpdateBalance(sourceAcctNo, sourceAccount.Bal);
+            AccountManager.UpdateBalance(destinationAcctNo, destinationAccount.Bal);
+        }
+
+        private static int GenerateRandomTransactionId()
+        {
+            var random = new Random();
+            return random.Next(1, 10000);
+        }
+
         public static void SeedTransaction()
         {
             DeleteAllTransactions(); 

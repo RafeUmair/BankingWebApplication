@@ -147,6 +147,32 @@ namespace assignment2A_real.Data
             }
         }
 
+        public static void UpdateBalance(int acctNo, decimal newBalance)
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = "UPDATE Account SET Bal = @NewBalance WHERE AcctNo = @AcctNo";
+                        command.Parameters.AddWithValue("@NewBalance", newBalance);
+                        command.Parameters.AddWithValue("@AcctNo", acctNo);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+        }
+
         public static void DeleteAccount(int acctNo)
         {
             try

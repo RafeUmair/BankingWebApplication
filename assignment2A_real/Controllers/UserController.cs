@@ -1,6 +1,7 @@
 ﻿using assignment2A_real.Data;
 using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Principal;
 
 namespace assignment2A_real.Controllers
@@ -20,6 +21,7 @@ namespace assignment2A_real.Controllers
                     TempData["Message2"] = userProfile.Name;
                     TempData["Message3"] = userProfile.AcctNo;
                     TempData["Message4"] = userProfile.AcctNo;
+                    TempData["Message5"] = userProfile.AcctNo;
 
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
@@ -108,6 +110,48 @@ namespace assignment2A_real.Controllers
             }
 
             return View("TransactionHistory");
+        }
+
+        public IActionResult Transfer()
+        {
+            TempData.ContainsKey("Message5");
+            int acctNo = (int)TempData["Message5"];
+            Account userAccount = AccountManager.GetAccountByAcctNo(acctNo);
+
+            if (userAccount == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            List<Account> accounts = AccountManager.GetAllAccounts();
+
+            if (accounts != null && accounts.Count > 0)
+            {
+                ViewBag.SourceAccount = userAccount;
+                ViewBag.Accounts = new SelectList(accounts, "AcctNo", "AcctNo");
+
+                return View("Transfer", userAccount); 
+            }
+
+            return View("Transfer");
+        }
+
+        [HttpPost]
+        public IActionResult Send(int sourceAcctNo, int destinationAcctNo, decimal amount)
+        {
+            if (amount <= 0)
+            {
+                return BadRequest("Invalid transfer amount.");
+            }
+
+            if (!AccountManager.AccountExists(sourceAcctNo) || !AccountManager.AccountExists(destinationAcctNo))
+            {
+                return NotFound("One or more accounts not found.");
+            }
+
+            TransactionManager.SendFunds(sourceAcctNo, destinationAcctNo, amount);
+
+            return View("FundsTransferred");
         }
     }
 }
