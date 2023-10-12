@@ -218,6 +218,48 @@ namespace assignment2A_real.Data
             return transactions;
         }
 
+        public static List<Transaction> GetTransactionsByAcctNo(int acctNo)
+        {
+            List<Transaction> transactions = new List<Transaction>();
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT * FROM \"Transaction\" WHERE AcctNo = @AcctNo";
+                        command.Parameters.AddWithValue("@AcctNo", acctNo);
+
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Transaction transaction = new Transaction
+                                {
+                                    TransactionId = reader.GetInt32(reader.GetOrdinal("TransactionId")),
+                                    Amount = reader.GetDecimal(reader.GetOrdinal("Amount")),
+                                    AcctNo = reader.GetInt32(reader.GetOrdinal("AcctNo")),
+                                    Type = reader.GetString(reader.GetOrdinal("Type"))
+                                };
+
+                                transactions.Add(transaction);
+                            }
+                        }
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+            }
+
+            return transactions;
+        }
 
         public static void SeedTransaction()
         {
@@ -300,7 +342,6 @@ namespace assignment2A_real.Data
             {
                 LoadSampleTransactionData();
             }
-
         }
 
         public static Transaction GetRandomTransaction()
@@ -312,10 +353,11 @@ namespace assignment2A_real.Data
                 var random = new Random();
                 int randomIndex = random.Next(0, allTransactions.Count);
                 return allTransactions[randomIndex];
-            }
-
+            }       
             return null;
         }
+
+
     }
 }
 

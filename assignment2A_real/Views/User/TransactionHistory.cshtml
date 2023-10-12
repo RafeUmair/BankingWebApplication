@@ -1,0 +1,42 @@
+﻿@model List<Transaction>
+
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<style>
+    .table-spacing th {
+        padding: 8px; 
+    }
+
+    .table-spacing td {
+        padding: 8px; 
+    }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+
+<p></p>
+@if (Model != null && Model.Count > 0)
+{
+    <p>Account Number: @Model[0].AcctNo</p>
+    <table class="table-spacing">
+        <tr>
+            <th>Transaction ID</th>
+            <th>Amount</th>
+            <th>Type</th>
+        </tr>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.TransactionId</td>
+                <td>@transaction.Amount</td>
+                <td>@transaction.Type</td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No transactions found for the specified account.</p>
+}

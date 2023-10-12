@@ -110,5 +110,18 @@ namespace assignment2A_real.Controllers
             AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Withdrawn {transaction.Amount:C} from account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
+
+        [HttpGet("{AcctNo}")]
+        public IActionResult GetAllTransactionsByAcctNo(int acctNo)
+        {          
+            List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);
+
+            if (transactions.Count == 0)
+            {
+                return NotFound("No Transactions found for the specified account number.");
+            }
+
+            return Ok(transactions);
+        }
     }
 }

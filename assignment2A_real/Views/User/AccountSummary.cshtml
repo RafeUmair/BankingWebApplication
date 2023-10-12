@@ -12,6 +12,10 @@
     <p>First Name: @Model.Fname</p>
     <p>Last Name: @Model.Lname</p>
     <p>Balance: @Model.Bal</p>
+
+    <form method="post" action="/User/TransactionHistory">
+        <button type="submit" class="btn btn-primary">Transaction History</button>
+    </form>
 }
 else
 {

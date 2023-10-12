@@ -15,7 +15,7 @@ namespace assignment2A_real.Models
 
         //[ForeignKey("UserProfile")]
         //public string? Name { get; set; }
-
+        
         [ForeignKey("Transaction")]
         public int TransactionId { get; set; }
     }

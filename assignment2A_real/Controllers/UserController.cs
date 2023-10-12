@@ -1,6 +1,7 @@
 ﻿using assignment2A_real.Data;
 using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace assignment2A_real.Controllers
 {
@@ -18,6 +19,7 @@ namespace assignment2A_real.Controllers
                     TempData["Message"] = userProfile.Name;
                     TempData["Message2"] = userProfile.Name;
                     TempData["Message3"] = userProfile.AcctNo;
+                    TempData["Message4"] = userProfile.AcctNo;
 
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
@@ -68,7 +70,7 @@ namespace assignment2A_real.Controllers
 
         public IActionResult EditProfile()
         {
-            string username = TempData["Message2"] as string; 
+            string username = TempData["Message2"] as string;
             UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
 
             if (userProfile != null)
@@ -90,6 +92,22 @@ namespace assignment2A_real.Controllers
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";
             return View("Error");
+        }
+
+        public IActionResult TransactionHistory()
+        {
+            if (TempData.ContainsKey("Message4"))
+            {
+                int acctNo = (int)TempData["Message4"];
+                List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);
+
+                if (transactions != null && transactions.Count > 0)
+                {
+                    return View("TransactionHistory", transactions);
+                }
+            }
+
+            return View("TransactionHistory");
         }
     }
 }
