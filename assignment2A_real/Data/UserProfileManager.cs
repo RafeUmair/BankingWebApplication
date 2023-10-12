@@ -180,33 +180,43 @@ namespace assignment2A_real.Data
             return userProfiles;
         }
 
-        public static void UpdateUserProfile(string oldname, UserProfile userProfile)
+        public static void UpdateUserProfile(string oldName, UserProfile updatedProfile)
         {
             try
             {
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
                     connection.Open();
-
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        DeleteUserProfile(oldname);
+                        using (var transaction = connection.BeginTransaction())
+                        {                         
+                            command.CommandText = @"
+                            UPDATE UserProfile
+                            SET Name = @NewName, Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password, Accounts = @Accounts, Type = @Type
+                            WHERE Name = @OldName";
+                            command.Parameters.AddWithValue("@NewName", updatedProfile.Name);
+                            command.Parameters.AddWithValue("@Email", updatedProfile.Email);
+                            command.Parameters.AddWithValue("@Address", updatedProfile.Address);
+                            command.Parameters.AddWithValue("@Phone", updatedProfile.Phone);
+                            command.Parameters.AddWithValue("@Picture", updatedProfile.Picture);
+                            command.Parameters.AddWithValue("@Password", updatedProfile.Password);
+                            command.Parameters.AddWithValue("@OldName", oldName); 
+                            command.Parameters.AddWithValue("@Accounts", updatedProfile.AcctNo);
+                            command.Parameters.AddWithValue("@Type", updatedProfile.Type);
+                            command.ExecuteNonQuery();
 
-                        command.CommandText = @"
-                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password, Accounts, Type)
-                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @Accounts, @Type)";
+                            command.CommandText = @"
+                            UPDATE OtherTable
+                            SET UserName = @NewName
+                            WHERE UserName = @OldName";
+                            command.Parameters.AddWithValue("@NewName", updatedProfile.Name);
+                            command.Parameters.AddWithValue("@OldName", oldName);
+                            command.ExecuteNonQuery();
 
-                        command.Parameters.AddWithValue("@Email", userProfile.Email);
-                        command.Parameters.AddWithValue("@Address", userProfile.Address);
-                        command.Parameters.AddWithValue("@Phone", userProfile.Phone);
-                        command.Parameters.AddWithValue("@Picture", userProfile.Picture);
-                        command.Parameters.AddWithValue("@Password", userProfile.Password);
-                        command.Parameters.AddWithValue("@Name", userProfile.Name);
-                        command.Parameters.AddWithValue("@Accounts", userProfile.AcctNo);
-                        command.Parameters.AddWithValue("@Type", userProfile.Type);
-                        command.ExecuteNonQuery();
+                            transaction.Commit();
+                        }
                     }
-
                     connection.Close();
                 }
             }
@@ -382,7 +392,7 @@ namespace assignment2A_real.Data
 
         public static void SeedUserProfile()
         {
-            DeleteAllUserProfiles(); // Delete all previous transactions
+            DeleteAllUserProfiles(); 
 
             string[] userprofilenames = { "shaquille.oatmeal", "CelebrityCaio", "hoosier-daddy", "BadKarma", "GRAFETY", "AllGoodNamesRGone", "anonymouse", "YESIMFUNNY", "BenAfleckIsAnOkActor", "JJAYZ" };
 
@@ -429,7 +439,7 @@ namespace assignment2A_real.Data
         {
             if (CreateUserProfileTable())
             {
-              // DeleteAllUserProfiles();
+               //DeleteAllUserProfiles();
                LoadSampleUserProfileData();
             }
         }

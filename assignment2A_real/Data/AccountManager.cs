@@ -365,7 +365,7 @@ namespace assignment2A_real.Data
         {
             if (CreateAccountTable())
             {
-                DeleteAllAccounts(); // Delete all previous accounts
+                //DeleteAllAccounts(); 
                 LoadSampleAccountData();
             }
         }

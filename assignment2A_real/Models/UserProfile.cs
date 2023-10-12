@@ -5,7 +5,6 @@ namespace assignment2A_real.Models
 {
     public class UserProfile
     {
-
         public string? Email { get; set; }
         [Key]
         public string? Name { get; set; }

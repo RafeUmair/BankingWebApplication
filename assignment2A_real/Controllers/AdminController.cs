@@ -57,6 +57,7 @@ namespace assignment2A_real.Controllers
 
             return NotFound();
         }
+
         [HttpPost]
         public IActionResult UpdateProfile(string name, string email, string address, long phone, string password)
         {
