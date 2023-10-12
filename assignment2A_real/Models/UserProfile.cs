@@ -12,7 +12,6 @@ namespace assignment2A_real.Models
         public long? Phone { get; set; }
         public string? Picture { get; set; }
         public string? Password { get; set; }
-
         [ForeignKey("Account")]
         public int AcctNo { get; set; }
         public string? Type { get; set; }

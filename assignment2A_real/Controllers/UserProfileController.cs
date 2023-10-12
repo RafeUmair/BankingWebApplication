@@ -61,17 +61,12 @@ namespace assignment2A_real.Controllers
         [HttpPut("{username}")]
         public IActionResult UpdateUserProfile(string username, UserProfile updatedUserProfile)
         {
-            // Check if the user profile exists
             if (!UserProfileManager.UserProfileExists(username))
             {
                 return NotFound("User profile not found.");
             }
 
-            // Update the user profile
-            //updatedUserProfile.Name = username; // Ensure the username is not changed
             UserProfileManager.UpdateUserProfile(username, updatedUserProfile);
-
-            // Return a success response or appropriate status code
             return Ok("User profile updated successfully.");
         }
     }

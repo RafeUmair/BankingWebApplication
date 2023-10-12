@@ -20,13 +20,13 @@ namespace assignment2A_real.Data
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
                         command.CommandText = @"
-                    CREATE TABLE IF NOT EXISTS ""Transaction"" (
-                    TransactionId INTEGER PRIMARY KEY,
-                    Amount DECIMAL,
-                    AcctNo INTEGER,
-                    Type TEXT, -- Add Type column
-                    FOREIGN KEY(AcctNo) REFERENCES Account(AcctNo)
-                )";
+                        CREATE TABLE IF NOT EXISTS ""Transaction"" (
+                        TransactionId INTEGER PRIMARY KEY,
+                        Amount DECIMAL,
+                        AcctNo INTEGER,
+                        Type TEXT, -- Add Type column
+                        FOREIGN KEY(AcctNo) REFERENCES Account(AcctNo)
+                    )";
 
                         command.ExecuteNonQuery();
                         connection.Close();

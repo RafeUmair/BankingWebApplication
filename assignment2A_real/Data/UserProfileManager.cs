@@ -180,43 +180,39 @@ namespace assignment2A_real.Data
             return userProfiles;
         }
 
-        public static void UpdateUserProfile(string oldName, UserProfile updatedProfile)
+        public static void UpdateUserProfile(string username, UserProfile userProfile)
         {
             try
             {
                 using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                 {
                     connection.Open();
+
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        using (var transaction = connection.BeginTransaction())
-                        {                         
-                            command.CommandText = @"
-                            UPDATE UserProfile
-                            SET Name = @NewName, Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password, Accounts = @Accounts, Type = @Type
-                            WHERE Name = @OldName";
-                            command.Parameters.AddWithValue("@NewName", updatedProfile.Name);
-                            command.Parameters.AddWithValue("@Email", updatedProfile.Email);
-                            command.Parameters.AddWithValue("@Address", updatedProfile.Address);
-                            command.Parameters.AddWithValue("@Phone", updatedProfile.Phone);
-                            command.Parameters.AddWithValue("@Picture", updatedProfile.Picture);
-                            command.Parameters.AddWithValue("@Password", updatedProfile.Password);
-                            command.Parameters.AddWithValue("@OldName", oldName); 
-                            command.Parameters.AddWithValue("@Accounts", updatedProfile.AcctNo);
-                            command.Parameters.AddWithValue("@Type", updatedProfile.Type);
-                            command.ExecuteNonQuery();
+                        command.CommandText = @"
+                        UPDATE UserProfile
+                        SET Email = @Email,
+                        Address = @Address,
+                        Phone = @Phone,
+                        Picture = @Picture,
+                        Password = @Password,
+                        Name = @Name,
+                        Type = @Type
+                        WHERE Name = @Username";
 
-                            command.CommandText = @"
-                            UPDATE OtherTable
-                            SET UserName = @NewName
-                            WHERE UserName = @OldName";
-                            command.Parameters.AddWithValue("@NewName", updatedProfile.Name);
-                            command.Parameters.AddWithValue("@OldName", oldName);
-                            command.ExecuteNonQuery();
+                        command.Parameters.AddWithValue("@Email", userProfile.Email);
+                        command.Parameters.AddWithValue("@Address", userProfile.Address);
+                        command.Parameters.AddWithValue("@Phone", userProfile.Phone);
+                        command.Parameters.AddWithValue("@Picture", userProfile.Picture);
+                        command.Parameters.AddWithValue("@Password", userProfile.Password);
+                        command.Parameters.AddWithValue("@Name", userProfile.Name);
+                        command.Parameters.AddWithValue("@Type", userProfile.Type);
+                        command.Parameters.AddWithValue("@Username", username);
 
-                            transaction.Commit();
-                        }
+                        command.ExecuteNonQuery();
                     }
+
                     connection.Close();
                 }
             }
@@ -346,7 +342,8 @@ namespace assignment2A_real.Data
                                     Phone = (long)(reader["Phone"]),
                                     Picture = reader["Picture"].ToString(),
                                     Type = reader["Type"].ToString(),
-                                    Password = reader["Password"].ToString()
+                                    Password = reader["Password"].ToString(),
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"])
                                 };
                             }
                             else

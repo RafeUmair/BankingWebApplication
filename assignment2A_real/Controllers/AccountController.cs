@@ -57,7 +57,6 @@ namespace assignment2A_real.Controllers
                 return NotFound("Account not found.");
             }
 
-            //updatedAccount.AcctNo = acctNo;
             AccountManager.UpdateAccount(acctNo, updatedAccount);
             return Content("updated account with newly entered values");
         }
