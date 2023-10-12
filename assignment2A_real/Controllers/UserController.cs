@@ -49,12 +49,11 @@ namespace assignment2A_real.Controllers
             return View("EditUserProfile", userProfile);
         }
 
-        public IActionResult UpdateUserProfile(string Email, long Phone, string Password)
+        public IActionResult UpdateUserProfile(string name, string Email, long Phone, string Password)
         {
-            ViewBag.Message = TempData["Message"] as string;
             try
             {
-                UserProfile userProfile = UserProfileManager.GetUserProfileByEmail(ViewBag.Message);
+                UserProfile userProfile = UserProfileManager.GetUserProfileByEmail(name);
 
                 if (userProfile != null)
                 {
