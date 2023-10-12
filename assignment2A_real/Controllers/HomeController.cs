@@ -32,8 +32,6 @@ namespace assignment2A_real.Controllers
 
         public IActionResult User()
         {
-            ViewBag.Message = TempData["Message"] as string;
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
             return View();
         }
 

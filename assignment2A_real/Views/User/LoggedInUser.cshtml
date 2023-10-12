@@ -6,15 +6,21 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<p>Welcome you have successfully logged in, @Model.Name!</p>
-<p>Email: @Model.Email</p>
-<p>Address: @Model.Address</p>
-<p>Phone: @Model.Phone</p>
-<p>Picture: @Model.Picture</p>
-<p>AcctNo: @Model.AcctNo</p>
+@if (Model != null)
+{
+    <p>Welcome you have successfully logged in, @Model.Name!</p>
+    <p>Email: @Model.Email</p>
+    <p>Address: @Model.Address</p>
+    <p>Phone: @Model.Phone</p>
+    <p>Picture: @Model.Picture</p>
+    <p>AcctNo: @Model.AcctNo</p>
+}
+else
+{
+    <p>User profile not found.</p>
+}
 
 <form method="post" action="/User/AccountSummary">
-    <input type="hidden" name="acctNo" value="@Model.AcctNo">
     <button type="submit" class="btn btn-primary">Account Summary</button>
 </form>
 
@@ -22,6 +28,6 @@
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
 
-<form method="post" action="/User/EditUserProfile">
+<form method="get" action="/User/EditProfile">
     <button type="submit" class="btn btn-success">Edit Profile</button>
 </form>

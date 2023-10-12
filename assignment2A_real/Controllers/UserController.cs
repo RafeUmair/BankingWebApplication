@@ -16,7 +16,10 @@ namespace assignment2A_real.Controllers
                 if (password == userProfile.Password)
                 {
                     TempData["Message"] = userProfile.Name;
-                    return RedirectToAction("LoggedIn");
+                    TempData["Message2"] = userProfile.Name;
+                    TempData["Message3"] = userProfile.AcctNo;
+
+                    return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
             }
 
@@ -24,11 +27,22 @@ namespace assignment2A_real.Controllers
             return RedirectToAction("FailedLogin");
         }
 
-        public IActionResult LoggedIn()
+        [HttpGet]
+        public IActionResult LoggedIn(string username)
         {
-            ViewBag.Message = TempData["Message"] as string;
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
-            return View("LoggedIn", userProfile);
+            if (string.IsNullOrEmpty(username))
+            {
+                return NotFound();
+            }
+
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+
+            if (userProfile != null)
+            {
+                return View("LoggedInUser", userProfile);
+            }
+
+            return NotFound();
         }
 
         public IActionResult FailedLogin()
@@ -36,47 +50,46 @@ namespace assignment2A_real.Controllers
             return View("FailedLogin");
         }
 
-        public IActionResult AccountSummary(int acctNo)
+        public IActionResult AccountSummary()
         {
-            Account account = AccountManager.GetAccountByAcctNo(acctNo);
-            return View("AccountSummary", account);
-        }
-
-        public IActionResult EditUserProfile()
-        {
-            ViewBag.Message = TempData["Message"] as string;
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
-            return View("EditUserProfile", userProfile);
-        }
-
-        public IActionResult UpdateUserProfile(string Email, long Phone, string Password)
-        {
-            ViewBag.Message = TempData["Message"] as string;
-            try
+            if (TempData.ContainsKey("Message3"))
             {
-                UserProfile userProfile = UserProfileManager.GetUserProfileByEmail(ViewBag.Message);
+                int acctNo = (int)TempData["Message3"];
+                Account account = AccountManager.GetAccountByAcctNo(acctNo);
 
-                if (userProfile != null)
+                if (account != null)
                 {
-                    userProfile.Email = Email;
-                    userProfile.Phone = Phone;
-                    userProfile.Password = Password;
-
-                    UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
-                    return RedirectToAction("DetailChange");
-                }
-
-                else
-                {
-                    ViewData["ErrorMessage"] = "User profile not found.";
+                    return View("AccountSummary", account);
                 }
             }
-            catch (Exception ex)
+
+            return NotFound();
+        }
+
+        public IActionResult EditProfile()
+        {
+            string username = TempData["Message2"] as string; 
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+
+            if (userProfile != null)
             {
-                ViewData["ErrorMessage"] = "An error occurred while updating the user profile: " + ex.Message;
+                return View("EditProfile", userProfile);
             }
 
-            return View("FailedLogin");
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateProfile(UserProfile userProfile)
+        {
+            if (userProfile != null)
+            {
+                UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
+                return RedirectToAction("LoggedIn", new { username = userProfile.Name });
+            }
+
+            ViewData["ErrorMessage"] = "Failed to update the profile.";
+            return View("Error");
         }
     }
 }
