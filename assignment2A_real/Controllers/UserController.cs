@@ -49,11 +49,12 @@ namespace assignment2A_real.Controllers
             return View("EditUserProfile", userProfile);
         }
 
-        public IActionResult UpdateUserProfile(string name, string Email, long Phone, string Password)
+        public IActionResult UpdateUserProfile(string Email, long Phone, string Password)
         {
+            ViewBag.Message = TempData["Message"] as string;
             try
             {
-                UserProfile userProfile = UserProfileManager.GetUserProfileByEmail(name);
+                UserProfile userProfile = UserProfileManager.GetUserProfileByEmail(ViewBag.Message);
 
                 if (userProfile != null)
                 {
@@ -64,6 +65,7 @@ namespace assignment2A_real.Controllers
                     UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
                     return RedirectToAction("DetailChange");
                 }
+
                 else
                 {
                     ViewData["ErrorMessage"] = "User profile not found.";
