@@ -18,7 +18,7 @@ namespace assignment2A_real.Controllers
                     TempData["Message"] = userProfile.Name;
                     TempData["Message2"] = userProfile.Name;
 
-                    return RedirectToAction("LoggedIn");
+                    return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
             }
 
@@ -26,11 +26,22 @@ namespace assignment2A_real.Controllers
             return RedirectToAction("FailedLogin");
         }
 
-        public IActionResult LoggedIn()
+        [HttpGet]
+        public IActionResult LoggedIn(string username)
         {
-            ViewBag.Message = TempData["Message"] as string;
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message);
-            return View("LoggedInAdmin", userProfile);
+            if (string.IsNullOrEmpty(username))
+            {
+                return NotFound();
+            }
+
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+
+            if (userProfile != null)
+            {
+                return View("LoggedInAdmin", userProfile);
+            }
+
+            return NotFound();
         }
 
         public IActionResult FailedLogin()
@@ -44,11 +55,11 @@ namespace assignment2A_real.Controllers
             return View("UserManagement", userProfiles);
         }
 
-        public IActionResult EditProfile(string username)
+        [HttpGet]
+        public IActionResult EditProfile()
         {
-            ViewBag.Message2 = TempData["Message2"] as string;
-
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(ViewBag.Message2);
+            string username = TempData["Message2"] as string; // Retrieve the username from TempData or another source
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
 
             if (userProfile != null)
             {
@@ -57,25 +68,17 @@ namespace assignment2A_real.Controllers
 
             return NotFound();
         }
-        [HttpPost]
-        public IActionResult UpdateProfile(string name, string email, string address, long phone, string password)
-        {
-            // Retrieve the old user profile by username
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(name);
 
+        [HttpPost]
+        public IActionResult UpdateProfile(UserProfile userProfile)
+        {
             if (userProfile != null)
             {
-                // Update the properties of the retrieved profile with the new values
-                userProfile.Email = email;
-                userProfile.Address = address;
-                userProfile.Phone = phone; // Ensure phone is a long
-                userProfile.Password = password;
+                // Simply update the user's profile with the new values.
+                UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
 
-                // Call the UpdateUserProfile method to save the updated profile
-                UserProfileManager.UpdateUserProfile(name, userProfile);
-
-                TempData["Message"] = "Profile updated successfully.";
-                return RedirectToAction("LoggedIn");
+                // Redirect back to the LoggedIn action with the username as a route parameter
+                return RedirectToAction("LoggedIn", new { username = userProfile.Name });
             }
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";

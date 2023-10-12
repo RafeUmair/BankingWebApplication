@@ -1,14 +1,23 @@
-﻿@{
+﻿@model assignment2A_real.Models.UserProfile
+
+@{
     ViewData["Title"] = "Admin Profile";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<p>Access gained, @Model.Name!</p>
-<p>Email: @Model.Email</p>
-<p>Address: @Model.Address</p>
-<p>Phone: @Model.Phone</p>
-<p>Picture: @Model.Picture</p>
+@if (Model != null)
+{
+    <p>Access gained, @Model.Name!</p>
+    <p>Email: @Model.Email</p>
+    <p>Address: @Model.Address</p>
+    <p>Phone: @Model.Phone</p>
+    <p>Picture: @Model.Picture</p>
+}
+else
+{
+    <p>User profile not found.</p>
+}
 
 <!-- Button to load User Management page -->
 <form method="get" action="/Admin/UserManagement">
@@ -16,7 +25,7 @@
 </form>
 
 <!-- Button for logout (you may need to implement the logout action) -->
-<form method="post" action="/Home/Admin">
+<form method="post" action="/Home/Index">
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
 

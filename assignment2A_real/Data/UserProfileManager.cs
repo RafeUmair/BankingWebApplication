@@ -180,7 +180,7 @@ namespace assignment2A_real.Data
             return userProfiles;
         }
 
-        public static void UpdateUserProfile(string oldname, UserProfile userProfile)
+        public static void UpdateUserProfile(string oldName, UserProfile userProfile)
         {
             try
             {
@@ -188,23 +188,41 @@ namespace assignment2A_real.Data
                 {
                     connection.Open();
 
-                    using (SQLiteCommand command = connection.CreateCommand())
+                    using (SQLiteTransaction transaction = connection.BeginTransaction())
                     {
-                        DeleteUserProfile(oldname);
+                        using (SQLiteCommand command = connection.CreateCommand())
+                        {
+                            // Check if the user with the old name exists
+                            command.CommandText = "SELECT COUNT(*) FROM UserProfile WHERE Name = @OldName";
+                            command.Parameters.AddWithValue("@OldName", oldName);
 
-                        command.CommandText = @"
-                        INSERT INTO UserProfile (Name, Email, Address, Phone, Picture, Password, Accounts, Type)
-                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @Accounts, @Type)";
+                            int count = Convert.ToInt32(command.ExecuteScalar());
 
-                        command.Parameters.AddWithValue("@Email", userProfile.Email);
-                        command.Parameters.AddWithValue("@Address", userProfile.Address);
-                        command.Parameters.AddWithValue("@Phone", userProfile.Phone);
-                        command.Parameters.AddWithValue("@Picture", userProfile.Picture);
-                        command.Parameters.AddWithValue("@Password", userProfile.Password);
-                        command.Parameters.AddWithValue("@Name", userProfile.Name);
-                        command.Parameters.AddWithValue("@Accounts", userProfile.AcctNo);
-                        command.Parameters.AddWithValue("@Type", userProfile.Type);
-                        command.ExecuteNonQuery();
+                            if (count == 0)
+                            {
+                                Console.WriteLine($"User with name '{oldName}' not found.");
+                                transaction.Rollback();
+                                return;
+                            }
+
+                            // Update the user profile without changing the name
+                            command.CommandText = @"
+                        UPDATE UserProfile 
+                        SET Email = @Email, Address = @Address, Phone = @Phone, Picture = @Picture, Password = @Password, Accounts = @Accounts, Type = @Type
+                        WHERE Name = @OldName";
+
+                            command.Parameters.AddWithValue("@Email", userProfile.Email);
+                            command.Parameters.AddWithValue("@Address", userProfile.Address);
+                            command.Parameters.AddWithValue("@Phone", userProfile.Phone);
+                            command.Parameters.AddWithValue("@Picture", userProfile.Picture);
+                            command.Parameters.AddWithValue("@Password", userProfile.Password);
+                            command.Parameters.AddWithValue("@OldName", oldName); // Use the old name for updating
+                            command.Parameters.AddWithValue("@Accounts", userProfile.AcctNo);
+                            command.Parameters.AddWithValue("@Type", userProfile.Type);
+                            command.ExecuteNonQuery();
+
+                            transaction.Commit();
+                        }
                     }
 
                     connection.Close();
@@ -429,7 +447,7 @@ namespace assignment2A_real.Data
         {
             if (CreateUserProfileTable())
             {
-              // DeleteAllUserProfiles();
+               DeleteAllUserProfiles();
                LoadSampleUserProfileData();
             }
         }
