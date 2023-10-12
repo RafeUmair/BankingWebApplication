@@ -15,7 +15,7 @@ namespace assignment2A_real.Controllers
             {
                 if (password == userProfile.Password)
                 {
-                    TempData["Message2"] = userProfile.Name;
+                    TempData["Message"] = userProfile.Name;
                     return RedirectToAction("LoggedIn");
                 }
             }
