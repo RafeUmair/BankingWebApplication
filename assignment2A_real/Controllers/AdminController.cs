@@ -16,7 +16,7 @@ namespace assignment2A_real.Controllers
                 if (password == userProfile.Password)
                 {
                     TempData["Message"] = userProfile.Name;
-                    TempData["Message2"] = userProfile.Name;
+                  //  TempData["Message2"] = userProfile.Name;
 
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
@@ -56,10 +56,10 @@ namespace assignment2A_real.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditProfile()
+        public IActionResult EditProfile(string name)
         {
-            string username = TempData["Message2"] as string; // Retrieve the username from TempData or another source
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+           // string username = TempData["Message2"] as string; // Retrieve the username from TempData or another source
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(name);
 
             if (userProfile != null)
             {
@@ -76,13 +76,25 @@ namespace assignment2A_real.Controllers
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
 
-
-                ViewData["Title"] = "Profile Successfully Saved for Admin :" + userProfile.Name;
-                ViewData["Message"] = "Profile successfully saved for :  " + userProfile.Name;
-                return View("AdminProfileSaved");
+                return View("LoggedInAdmin", userProfile);
             }
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";
+            return View("Error");
+        }
+        [HttpPost]
+        public IActionResult DeactivateUser(UserProfile userProfile)
+        {
+
+            if (userProfile != null)
+            {
+                UserProfileManager.DeleteUserProfile(userProfile.Name); // Call the method to delete the user
+
+                TempData["DeactivationMessage"] = "User deactivated: " + userProfile.Name;
+                return RedirectToAction("UserManagement");
+            }
+
+            ViewData["ErrorMessage"] = "Failed to deactivate the user";
             return View("Error");
         }
     }

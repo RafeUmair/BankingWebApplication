@@ -6,6 +6,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
+
 <h2>User List</h2>
 <table>
     <tr>
@@ -27,7 +28,7 @@
             <td>@user.AcctNo</td>
             <td>
                 <button onclick="editUser('@user.Name')">Edit</button>
-                <button onclick="deactivateUser('@user.Name')">Deactivate</button>
+                <button class="deactivate-button" data-username="@user.Name">Deactivate</button>
             </td>
         </tr>
     }
@@ -63,12 +64,3 @@
     <button type="submit">Search</button>
 </form>
 
-<script>
-    function editUser(userId) {
-        // Implement user editing logic (e.g., open a modal or navigate to an edit page)
-    }
-
-    function deactivateUser(userId) {
-        // Implement user deactivation logic (e.g., confirm deactivation and update user status)
-    }
-</script>
