@@ -283,17 +283,17 @@ namespace assignment2A_real.Data
             var sourceTransaction = new Transaction
             {
                 TransactionId = transactionId,
-                Amount = -amount,  // Withdrawal
+                Amount = -amount,  
                 AcctNo = sourceAcctNo,
-                Type = "Send"
+                Type = "Sent"
             };
 
             var destinationTransaction = new Transaction
             {
                 TransactionId = transactionId,
-                Amount = amount,  // Deposit
+                Amount = amount,  
                 AcctNo = destinationAcctNo,
-                Type = "Send"
+                Type = "Recieved"
             };
 
             sourceAccount.Bal -= amount;

@@ -361,6 +361,50 @@ namespace assignment2A_real.Data
             }
         }
 
+        public static UserProfile GetUserProfileByAcctNo(int acctNo)
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SQLiteCommand command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT * FROM UserProfile WHERE AccountNo = @AcctNo";
+                        command.Parameters.AddWithValue("@AcctNo", acctNo);
+
+                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return new UserProfile
+                                {
+                                    Name = reader["Name"].ToString(),
+                                    Email = reader["Email"].ToString(),
+                                    Address = reader["Address"].ToString(),
+                                    Phone = (long)reader["Phone"],
+                                    Picture = reader["Picture"].ToString(),
+                                    Password = reader["Password"].ToString(),
+                                    Type = reader["Type"].ToString(),
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"])
+                                };
+                            }
+                            else
+                            {
+                                return null;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error: " + ex.Message);
+                return null;
+            }
+        }
+
         public static bool UserProfileExists(string username)
         {
             try

@@ -3,6 +3,7 @@ using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Principal;
+using System.Xml.Linq;
 
 namespace assignment2A_real.Controllers
 {
@@ -17,12 +18,7 @@ namespace assignment2A_real.Controllers
             {
                 if (password == userProfile.Password)
                 {
-                    TempData["Message"] = userProfile.Name;
-                    TempData["Message2"] = userProfile.Name;
-                    TempData["Message3"] = userProfile.AcctNo;
-                    TempData["Message4"] = userProfile.AcctNo;
-                    TempData["Message5"] = userProfile.AcctNo;
-
+                    TempData["Message"] = userProfile.Name;                 
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
             }
@@ -54,26 +50,15 @@ namespace assignment2A_real.Controllers
             return View("FailedLogin");
         }
 
-        public IActionResult AccountSummary()
-        {
-            if (TempData.ContainsKey("Message3"))
-            {
-                int acctNo = (int)TempData["Message3"];
-                Account account = AccountManager.GetAccountByAcctNo(acctNo);
-
-                if (account != null)
-                {
-                    return View("AccountSummary", account);
-                }
-            }
-
-            return NotFound();
+        public IActionResult AccountSummary(int acctNo)
+        {           
+            Account account = AccountManager.GetAccountByAcctNo(acctNo);
+            return View("AccountSummary", account);
         }
 
-        public IActionResult EditProfile()
-        {
-            string username = TempData["Message2"] as string;
-            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+        public IActionResult EditProfile(string name)
+        {         
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(name);
 
             if (userProfile != null)
             {
@@ -89,33 +74,21 @@ namespace assignment2A_real.Controllers
             if (userProfile != null)
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
-                return View("DetailChange");
+                return View("LoggedInUser", userProfile);
             }
 
             ViewData["ErrorMessage"] = "Failed to update the profile.";
             return View("Error");
         }
 
-        public IActionResult TransactionHistory()
+        public IActionResult TransactionHistory(int acctNo)
         {
-            if (TempData.ContainsKey("Message4"))
-            {
-                int acctNo = (int)TempData["Message4"];
-                List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);
-
-                if (transactions != null && transactions.Count > 0)
-                {
-                    return View("TransactionHistory", transactions);
-                }
-            }
-
-            return View("TransactionHistory");
+            List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);   
+            return View("TransactionHistory", transactions);
         }
 
-        public IActionResult Transfer()
+        public IActionResult Transfer(int acctNo)
         {
-            TempData.ContainsKey("Message5");
-            int acctNo = (int)TempData["Message5"];
             Account userAccount = AccountManager.GetAccountByAcctNo(acctNo);
 
             if (userAccount == null)
@@ -150,8 +123,8 @@ namespace assignment2A_real.Controllers
             }
 
             TransactionManager.SendFunds(sourceAcctNo, destinationAcctNo, amount);
-
-            return View("FundsTransferred");
+            UserProfile userProfile = UserProfileManager.GetUserProfileByAcctNo(sourceAcctNo);
+            return View("LoggedInUser", userProfile);
         }
     }
 }

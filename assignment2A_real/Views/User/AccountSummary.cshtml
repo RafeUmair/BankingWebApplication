@@ -14,10 +14,12 @@
     <p>Balance: @Model.Bal</p>
 
     <form method="post" action="/User/TransactionHistory">
+        <input type="hidden" name="acctNo" value="@Model.AcctNo"/>
         <button type="submit" class="btn btn-primary">Transaction History</button>
     </form>
 
     <form method="post" action="/User/Transfer">
+        <input type="hidden" name="acctNo" value="@Model.AcctNo" />
         <button type="submit" class="btn btn-success">Transfer funds</button>
     </form>
 }
