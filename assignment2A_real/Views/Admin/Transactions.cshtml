@@ -1,0 +1,39 @@
+﻿@model List<assignment2A_real.Models.Transaction> 
+
+@{
+    ViewData["Title"] = "Transaction History";
+}
+
+<style>
+    .table-spacing th {
+        padding: 15px;
+    }
+
+    .table-spacing td {
+        padding: 15px;
+    }
+</style>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Transaction ID</th>
+            <th>Amount</th>
+            <th>Account Number</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.TransactionId</td>
+                <td>$@transaction.Amount</td>
+                <td>@transaction.AcctNo</td>
+                <td>@transaction.Type</td>
+            </tr>
+        }
+    </tbody>
+</table>

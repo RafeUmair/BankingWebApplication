@@ -95,5 +95,12 @@ namespace assignment2A_real.Controllers
             }
              return View("Error");
         }
+
+        public IActionResult Transactions()
+        {
+            List<Transaction> transactions = TransactionManager.GetAllTransactions(); 
+
+            return View("Transactions", transactions);
+        }
     }
 }
