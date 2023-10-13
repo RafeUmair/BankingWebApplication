@@ -4,18 +4,28 @@
     ViewData["Title"] = "User Management";
 }
 
+
+<style>
+    .table-spacing th {
+        padding: 8px;
+    }
+
+    .table-spacing td {
+        padding: 8px;
+    }
+</style>
+
 <h1>@ViewData["Title"]</h1>
 
 
 <h2>User List</h2>
-<table>
+<table class="table">
     <tr>
         <th>Name</th>
         <th>Email</th>
         <th>Phone</th>
         <th>Password</th>
         <th>AcctNo</th>
-
         <th>Action</th>
     </tr>
     @foreach (var user in Model)
@@ -23,7 +33,7 @@
         <tr>
             <td>@user.Name</td>
             <td>@user.Email</td>
-             <td>@user.Phone</td>
+            <td>@user.Phone</td>
             <td>@user.Password</td>
             <td>@user.AcctNo</td>
             <td>
@@ -31,10 +41,13 @@
                     <input type="hidden" name="name" value="@user.Name" />
                     <button type="submit" class="btn btn-primary">Deactivate</button>
                 </form>
+                <form method="get" action="/Admin/EditSelectProfile">
+                    <input type="hidden" name="name" value="@user.Name" />
+                    <button type="submit" class="btn btn-primary">Edit</button>
+                </form>
             </td>
         </tr>
     }
-
 </table>
 
 <h2>Create User</h2>
@@ -55,16 +68,24 @@
     <input type="password" id="password" name="password" required />
 
     <label for="acctNo">Account Number:</label>
-    <input type="text" id="acctNo" name="acctNo" required />
+    <input type="text" id="acctNo" name="acctNo" />
+
+    <label for="type">Type:</label>
+    <input type="text" id="type" name="type" />
+
+    <label for="picture">Picture:</label>
+    <input type="text" id="picture" name="picture" />
 
 
-    <button type="submit">Create User</button>
+    <button type="submit" class="btn btn-primary">Create User</button>
 </form>
 
 <h2>Search Users</h2>
 <form method="get" action="/Admin/SearchUsers">
-    <input type="text" id="searchTerm" name="searchTerm" placeholder="Search by name or email" />
-    <button type="submit">Search</button>
+    <div class="form-group">
+        <input type="text" id="searchTerm" name="search" class="form-control" placeholder="Search by name or email" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
 </form>
 
 <form method="post" action="/Admin/Transactions">

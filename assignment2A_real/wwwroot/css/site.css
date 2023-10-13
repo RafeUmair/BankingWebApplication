@@ -16,3 +16,21 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* Add border and padding to the table */
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+/* Add borders to table cells and header cells */
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Add background color to header cells */
+th {
+    background-color: #f2f2f2;
+}

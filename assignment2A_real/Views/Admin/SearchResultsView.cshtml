@@ -1,0 +1,35 @@
+﻿@model List<object>  
+
+<h2>Search Results</h2>
+
+@if (Model.Count == 0)
+{
+    <p>No results found.</p>
+}
+else
+{
+    foreach (var result in Model)
+    {
+        if (result is Account account)
+        {
+            <h3>Account</h3>
+            <p><strong>Account Number:</strong> @account.AcctNo</p>
+            <p><strong>First Name:</strong> @account.Fname</p>
+            <p><strong>Last Name:</strong> @account.Lname</p>
+            <p><strong>Balance:</strong> @account.Bal</p>
+            <p><strong>PIN:</strong> @account.Pin</p>
+        }
+        else if (result is UserProfile userProfile)
+        {
+            <h3>User Profile</h3>
+            <p><strong>Name:</strong> @userProfile.Name</p>
+            <p><strong>Email:</strong> @userProfile.Email</p>
+            <p><strong>Address:</strong> @userProfile.Address</p>
+            <p><strong>Phone:</strong> @userProfile.Phone</p>
+            <p><strong>Password:</strong> @userProfile.Password</p>
+            <p><strong>Account Number:</strong> @userProfile.AcctNo</p>
+            <p><strong>Type:</strong> @userProfile.Type</p>
+            <p><strong>Picture:</strong> @userProfile.Picture</p>
+        }
+    }
+}

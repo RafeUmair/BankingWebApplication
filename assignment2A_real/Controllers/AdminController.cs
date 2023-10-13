@@ -1,6 +1,7 @@
 ﻿using assignment2A_real.Data;
 using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 using System.Xml.Linq;
 
 namespace assignment2A_real.Controllers
@@ -57,7 +58,6 @@ namespace assignment2A_real.Controllers
         [HttpGet]
         public IActionResult EditProfile(string name)
         {
-           // string username = TempData["Message2"] as string; // Retrieve the username from TempData or another source
             UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(name);
 
             if (userProfile != null)
@@ -101,6 +101,83 @@ namespace assignment2A_real.Controllers
             List<Transaction> transactions = TransactionManager.GetAllTransactions(); 
 
             return View("Transactions", transactions);
+        }
+
+
+        [HttpGet]
+        public IActionResult EditSelectProfile(string name)
+        {
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(name);
+
+            if (userProfile != null)
+            {
+                return View("EditSelectProfile", userProfile);
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult UpdateSelectProfile(UserProfile userProfile)
+        {
+            if (userProfile != null)
+            {
+                UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
+                List<UserProfile> userProfilelist = UserProfileManager.GetAllUserProfiles().ToList(); 
+                return View("UserManagement", userProfilelist);
+            }
+
+            ViewData["ErrorMessage"] = "Failed to update the profile.";
+            return View("Error");
+        }
+
+        [HttpPost]
+        public IActionResult CreateUser(UserProfile userProfile)
+        {
+            if (userProfile != null)
+            {
+                if (AccountManager.AccountExists(userProfile.AcctNo))
+                {
+                    UserProfileManager.InsertUserProfile(userProfile);
+                    List<UserProfile> userProfilelist = UserProfileManager.GetAllUserProfiles().ToList();
+                    return View("UserManagement", userProfilelist);
+                }
+                ViewData["ErrorMessage"] = "AccountNo does not exist";
+                return View("Error", new ErrorViewModel { RequestId = "Error, account number does not exist" }); 
+            }
+            ViewData["ErrorMessage"] = "Failed to update the profile.";
+            return View("Error", new ErrorViewModel { RequestId = "Failed to update the profile." });
+            }
+
+        [HttpGet]
+        public IActionResult SearchUsers(String search)
+        {
+            var searchResults = new List<object>(); 
+
+            if (string.IsNullOrEmpty(search))
+            {
+                return View("Error", new ErrorViewModel { RequestId = "No search term entered" });
+            }
+
+
+            if (int.TryParse(search, out int accountNumber))
+            {
+                Account account = AccountManager.GetAccountByAcctNo(accountNumber);
+                if (account != null)
+                {
+                    searchResults.Add(account); 
+                }
+            } 
+            else
+            {
+                UserProfile profile = UserProfileManager.GetUserProfileByUsername(search);
+                if (profile != null)
+                {
+                    searchResults.Add(profile); 
+                }
+            }
+            return View("SearchResultsView", searchResults);
+
         }
     }
 }
