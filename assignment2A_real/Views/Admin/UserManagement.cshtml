@@ -27,11 +27,32 @@
             <td>@user.Password</td>
             <td>@user.AcctNo</td>
             <td>
-                <button onclick="editUser('@user.Name')">Edit</button>
-                <button class="deactivate-button" data-username="@user.Name">Deactivate</button>
+                <form method="post" action="/Admin/DeactivateUser">
+                    <input type="hidden" name="name" value="@user.Name" />
+                    <button type="submit" class="btn btn-primary">Deactivate</button>
+                </form>
             </td>
         </tr>
     }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.deactivate-btn').on('click', function () {
+                var userName = $(this).data('username');
+                var button = $(this);
+
+                $.post('/Admin/DeactivateUser', { Name: userName }, function (response) {
+                    if (response.success) {
+                        // Remove the deleted user from the table
+                        button.closest('tr').remove();
+                    } else {
+                        alert('Deactivation failed: ' + response.error);
+                    }
+                });
+            });
+        });
+    </script>
+
 </table>
 
 <h2>Create User</h2>

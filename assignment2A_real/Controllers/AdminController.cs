@@ -1,6 +1,7 @@
 ﻿using assignment2A_real.Data;
 using assignment2A_real.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Xml.Linq;
 
 namespace assignment2A_real.Controllers
 {
@@ -16,8 +17,6 @@ namespace assignment2A_real.Controllers
                 if (password == userProfile.Password)
                 {
                     TempData["Message"] = userProfile.Name;
-                  //  TempData["Message2"] = userProfile.Name;
-
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
             }
@@ -82,20 +81,19 @@ namespace assignment2A_real.Controllers
             ViewData["ErrorMessage"] = "Failed to update the profile.";
             return View("Error");
         }
+
         [HttpPost]
-        public IActionResult DeactivateUser(UserProfile userProfile)
+        public IActionResult DeactivateUser(string Name)
         {
+            UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(Name);
 
-            if (userProfile != null)
+            if ((userProfile != null))
             {
-                UserProfileManager.DeleteUserProfile(userProfile.Name); // Call the method to delete the user
+                UserProfileManager.DeleteUserProfile(userProfile.Name); 
 
-                TempData["DeactivationMessage"] = "User deactivated: " + userProfile.Name;
-                return RedirectToAction("UserManagement");
+                return View("UserDeactivated", userProfile.Name);
             }
-
-            ViewData["ErrorMessage"] = "Failed to deactivate the user";
-            return View("Error");
+             return View("Error");
         }
     }
 }

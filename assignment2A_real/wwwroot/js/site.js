@@ -3,16 +3,8 @@
 
 // Write your JavaScript code.
 <script>
-    $(document).ready(function () {
-        $('.deactivate-button').click(function () {
-            var username = $(this).data('username');
-
-            if (confirm('Are you sure you want to deactivate ' + username + '?')) {
-                $.post('/Admin/DeactivateUser', { username: username }, function () {
-                    // Reload the page or update the UI as needed
-                    location.reload(); // Refresh the page to update the user list
-                });
-            }
-        });
-    });
+    // JavaScript function to refresh the page
+    function refreshPage() {
+        location.reload();
+    }
 </script>
