@@ -1,4 +1,5 @@
 ﻿using assignment2A_real.Models;
+using System.Data;
 using System.Data.Entity;
 using System.Data.SQLite;
 using System.Text;
@@ -27,7 +28,7 @@ namespace assignment2A_real.Data
                         Email TEXT,
                         Address TEXT,
                         Phone INTEGER,
-                        Picture TEXT,
+                        Picture BLOB,
                         Password TEXT,
                         Type TEXT,
                         AccountNo INTEGER -- Add Accounts column
@@ -46,54 +47,55 @@ namespace assignment2A_real.Data
                 return false; 
             }
         }
-            public static void LoadSampleUserProfileData()
-            {
-                  List<UserProfile> sampleUserProfiles = new List<UserProfile>
+        public static void LoadSampleUserProfileData()
         {
-            new UserProfile
+            List<UserProfile> sampleUserProfiles = new List<UserProfile>
             {
-                Name = "john_doee",
-                Email = "john@example.com",
-                Address = "123 Main St",
-                Phone = 5551234567,
-                Picture = "john.jpg",
-                Password = "password123",
-                Type = "admin",
-            },
-            new UserProfile
+                new UserProfile
+                {
+                    Name = "john_doee",
+                    Email = "john@example.com",
+                    Address = "123 Main St",
+                    Phone = 5551234567,
+                    Picture = File.ReadAllBytes("john.jpg"), 
+                    Password = "password123",
+                    Type = "admin",
+                },
+                new UserProfile
+                {
+                    Name = "jane_smiths",
+                    Email = "jane@example.com",
+                    Address = "456 Elm St",
+                    Phone = 5559876543,
+                    Picture = File.ReadAllBytes("jane.jpg"),
+                    Password = "password456",
+                    Type = "user",
+                },
+                new UserProfile
+                {
+                    Name = "alice_johnsons",
+                    Email = "alice@example.com",
+                    Address = "789 Oak St",
+                    Phone = 5555555555,
+                    Picture = File.ReadAllBytes("alice.jpg"),
+                    Password = "password789",
+                    Type = "user",
+                }
+            };
+
+            foreach (var userProfile in sampleUserProfiles)
             {
-                Name = "jane_smiths",
-                Email = "jane@example.com",
-                Address = "456 Elm St",
-                Phone = 5559876543,
-                Picture = "jane.jpg",
-                Password = "password456",
-                Type = "user",
-            },
-            new UserProfile
-            {
-                Name = "alice_johnsons",
-                Email = "alice@example.com",
-                Address = "789 Oak St",
-                Phone = 5555555555,
-                Picture = "alice.jpg",
-                Password = "password789",
-                Type = "user",
+                Account account = AccountManager.GetRandomAccount();
+                if (account != null)
+                {
+                    userProfile.AcctNo = account.AcctNo;
+                    InsertUserProfile(userProfile);
+                }
             }
 
-        };
+            Console.WriteLine("Sample user profile data loaded successfully");
+        }
 
-                foreach (var userProfile in sampleUserProfiles)
-                {
-                    Account account = AccountManager.GetRandomAccount();
-                    if (account != null)
-                    {
-                        userProfile.AcctNo = account.AcctNo;
-                        InsertUserProfile(userProfile);
-                    }
-                }
-                Console.WriteLine("Sample user profile data loaded successfully");
-    }
 
         public static void InsertUserProfile(UserProfile userProfile)
         {
@@ -106,16 +108,16 @@ namespace assignment2A_real.Data
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
                         command.CommandText = @"
-                   INSERT OR IGNORE INTO UserProfile (Name, Email, Address, Phone, Picture, Password, AccountNo, Type)
-                   VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @AccountNo, @Type)";
+                        INSERT OR IGNORE INTO UserProfile (Name, Email, Address, Phone, Picture, Password, AccountNo, Type)
+                        VALUES (@Name, @Email, @Address, @Phone, @Picture, @Password, @AccountNo, @Type)";
 
-                        command.Parameters.AddWithValue("@Name", userProfile.Name); 
+                        command.Parameters.AddWithValue("@Name", userProfile.Name);
                         command.Parameters.AddWithValue("@Email", userProfile.Email);
                         command.Parameters.AddWithValue("@Address", userProfile.Address);
                         command.Parameters.AddWithValue("@Phone", userProfile.Phone);
-                        command.Parameters.AddWithValue("@Picture", userProfile.Picture);
+                        command.Parameters.Add("@Picture", DbType.Binary).Value = userProfile.Picture; 
                         command.Parameters.AddWithValue("@Password", userProfile.Password);
-                        command.Parameters.AddWithValue("@AccountNo", userProfile.AcctNo); 
+                        command.Parameters.AddWithValue("@AccountNo", userProfile.AcctNo);
                         command.Parameters.AddWithValue("@Type", userProfile.Type);
                         command.ExecuteNonQuery();
                     }
@@ -128,6 +130,7 @@ namespace assignment2A_real.Data
                 Console.WriteLine("Error: " + ex.Message);
             }
         }
+
         public static IEnumerable<UserProfile> GetAllUserProfiles()
         {
             List<UserProfile> userProfiles = new List<UserProfile>();
@@ -152,16 +155,13 @@ namespace assignment2A_real.Data
                                     Email = reader["Email"].ToString(),
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)(reader["Phone"]),
-                                    Picture = reader["Picture"].ToString(),
                                     Password = reader["Password"].ToString(),
                                     Type = reader["Type"].ToString(),
-                                    AcctNo = Convert.ToInt32(reader["AccountNo"]) 
-
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"])
                                 };
 
                                 userProfiles.Add(userProfile);
                                 Console.WriteLine(userProfile.Name);
-
                             }
                         }
                     }
@@ -290,7 +290,7 @@ namespace assignment2A_real.Data
                                     Email = reader["Email"].ToString(),
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)(reader["Phone"]),
-                                    Picture = reader["Picture"].ToString(),
+                                    Picture = (byte[])reader["Picture"],
                                     Password = reader["Password"].ToString(),
                                     Type = reader["Type"].ToString(),
                                     AcctNo = Convert.ToInt32(reader["AccountNo"])
@@ -334,7 +334,7 @@ namespace assignment2A_real.Data
                                     Email = reader["Email"].ToString(),
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)(reader["Phone"]),
-                                    Picture = reader["Picture"].ToString(),
+                                    Picture = (byte[])reader["Picture"],
                                     Type = reader["Type"].ToString(),
                                     Password = reader["Password"].ToString(),
                                     AcctNo = Convert.ToInt32(reader["AccountNo"])
@@ -378,7 +378,7 @@ namespace assignment2A_real.Data
                                     Email = reader["Email"].ToString(),
                                     Address = reader["Address"].ToString(),
                                     Phone = (long)reader["Phone"],
-                                    Picture = reader["Picture"].ToString(),
+                                    Picture = (byte[])reader["Picture"],
                                     Password = reader["Password"].ToString(),
                                     Type = reader["Type"].ToString(),
                                     AcctNo = Convert.ToInt32(reader["AccountNo"])
@@ -427,12 +427,11 @@ namespace assignment2A_real.Data
 
         public static void SeedUserProfile()
         {
-            DeleteAllUserProfiles(); 
+            DeleteAllUserProfiles();
 
             string[] userprofilenames = { "shaquille.oatmeal", "CelebrityCaio", "hoosier-daddy", "BadKarma", "GRAFETY", "AllGoodNamesRGone", "anonymouse", "YESIMFUNNY", "BenAfleckIsAnOkActor", "JJAYZ" };
 
             var random = new Random();
-            var userProfiles = new List<UserProfile>();
 
             for (int i = 0; i < 10; i++)
             {
@@ -443,14 +442,14 @@ namespace assignment2A_real.Data
                 {
                     Name = name,
                     Email = GenerateRandomString() + "@example.com",
-                    Address = $"Address {i}" + GenerateRandomString(),
+                    Address = $"Address {i} " + GenerateRandomString(),
                     Phone = (long)random.Next(100000000, 1000000000),
-                    Picture = GenerateRandomString() + ".png",
+                    Picture = Encoding.ASCII.GetBytes(GenerateRandomString() + ".png"), 
                     Password = GenerateRandomString(),
                     AcctNo = AccountManager.GetRandomAccount().AcctNo,
-                    Type = type  
+                    Type = type
                 };
-                userProfiles.Add(userProfile);
+
                 InsertUserProfile(userProfile);
             }
         }

@@ -43,10 +43,9 @@ namespace assignment2A_real.Controllers
 
             if (userProfile != null)
             {
-                LogAdminAction(userProfile.Name, "Admin Logged In");
-                loggedInAdminName = userProfile.Name;
                 return View("LoggedInAdmin", userProfile);
             }
+
             return NotFound();
         }
 
@@ -235,7 +234,6 @@ namespace assignment2A_real.Controllers
         }
 
         [HttpGet]
-
         public IActionResult TransactionDetails([FromQuery] int transactionId)
         {
             Transaction transaction = TransactionManager.GetTransactionById(transactionId);
@@ -250,5 +248,28 @@ namespace assignment2A_real.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult UploadImage(IFormFile profileImage, string username)
+        {
+            if (profileImage != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    profileImage.CopyTo(memoryStream);
+                    var pictureData = memoryStream.ToArray();
+
+                    UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+                    if (userProfile != null)
+                    {
+                        userProfile.Picture = pictureData;
+
+                        UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
+                        return RedirectToAction("LoggedIn", new { username = userProfile.Name });
+                    }
+                }
+            }
+
+            return RedirectToAction("LoggedIn");
+        }
     }
 }

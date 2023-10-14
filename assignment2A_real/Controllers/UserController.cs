@@ -135,6 +135,30 @@ namespace assignment2A_real.Controllers
             TransactionManager.SendFunds(sourceAcctNo, destinationAcctNo, amount, description); 
             UserProfile userProfile = UserProfileManager.GetUserProfileByAcctNo(sourceAcctNo);
             return View("LoggedInUser", userProfile);
-        }       
+        }
+
+        [HttpPost]
+        public IActionResult UploadImage(IFormFile profileImage, string username)
+        {
+            if (profileImage != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    profileImage.CopyTo(memoryStream);
+                    var pictureData = memoryStream.ToArray();
+
+                    UserProfile userProfile = UserProfileManager.GetUserProfileByUsername(username);
+                    if (userProfile != null)
+                    {
+                        userProfile.Picture = pictureData;
+
+                        UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
+                        return RedirectToAction("LoggedIn", new { username = userProfile.Name });
+                    }
+                }
+            }
+
+            return RedirectToAction("LoggedIn");
+        }
     }
 }

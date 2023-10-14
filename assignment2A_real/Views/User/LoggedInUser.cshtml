@@ -4,24 +4,55 @@
     ViewData["Title"] = "User Profile";
 }
 
+<style>
+    .user-profile {
+        display: flex;
+    }
+
+    .user-image {
+        width: 200px;
+        margin-right: 20px;
+        z-index: 1;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+</style>
+
 <h1>@ViewData["Title"]</h1>
 
 @if (Model != null)
 {
-    <p>Welcome you have successfully logged in, @Model.Name!</p>
-    <p>Email: @Model.Email</p>
-    <p>Address: @Model.Address</p>
-    <p>Phone: @Model.Phone</p>
-    <p>Picture: @Model.Picture</p>
-    <p>AcctNo: @Model.AcctNo</p>
+    <div class="user-profile">
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Picture)" alt="User Image" class="user-image" />
+
+        <div class="user-info">
+            <p>Welcome you have successfully logged in, @Model.Name!</p>
+            <p>Email: @Model.Email</p>
+            <p>Address: @Model.Address</p>
+            <p>Phone: @Model.Phone</p>
+            <p>AcctNo: @Model.AcctNo</p>
+        </div>
+    </div>
+
+    <form method="post" action="/User/UploadImage" enctype="multipart/form-data">
+        <input type="hidden" name="username" value="@Model.Name" />
+        <div class="form-group">
+            <label for="profileImage">Upload Profile Image:</label>
+            <input type="file" name="profileImage" id="profileImage" accept=".jpg, .jpeg, .png" />
+        </div>
+        <button type="submit" class="btn btn-info">Upload Image</button>
+    </form>
 }
+
 else
 {
     <p>User profile not found.</p>
 }
 
 <form method="post" action="/User/AccountSummary">
-    <input type="hidden" name="acctNo" value="@Model.AcctNo"/>
+    <input type="hidden" name="acctNo" value="@Model.AcctNo" />
     <button type="submit" class="btn btn-primary">Account Summary</button>
 </form>
 
@@ -30,6 +61,6 @@ else
 </form>
 
 <form method="get" action="/User/EditProfile">
-    <input type="hidden" name="name" value="@Model.Name"/>
+    <input type="hidden" name="name" value="@Model.Name" />
     <button type="submit" class="btn btn-success">Edit Profile</button>
 </form>

@@ -6,18 +6,51 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<style>
+    .user-profile {
+        display: flex;
+    }
+
+    .user-image {
+        width: 200px;
+        margin-right: 20px;
+        z-index: 1;
+    }
+
+    .user-info {
+        flex: 1;
+    }
+</style>
+
 @if (Model != null)
 {
-    <p>Access gained, @Model.Name!</p>
-    <p>Email: @Model.Email</p>
-    <p>Address: @Model.Address</p>
-    <p>Phone: @Model.Phone</p>
-    <p>Picture: @Model.Picture</p>
+    <div class="user-profile">
+        <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.Picture)" alt="User Image" class="user-image" />
+
+        <div class="user-info">
+            <p>Access gained, @Model.Name!</p>
+            <p>Email: @Model.Email</p>
+            <p>Address: @Model.Address</p>
+            <p>Phone: @Model.Phone</p>
+
+            <p>AcctNo: @Model.AcctNo</p>
+        </div>
+    </div>
 }
+
 else
 {
     <p>User profile not found.</p>
 }
+
+<form method="post" action="/Admin/UploadImage" enctype="multipart/form-data">
+    <input type="hidden" name="username" value="@Model.Name" />
+    <div class="form-group">
+        <label for="profileImage">Upload Profile Image:</label>
+        <input type="file" name="profileImage" id="profileImage" accept=".jpg, .jpeg, .png" />
+    </div>
+    <button type="submit" class="btn btn-primary">Upload Image</button>
+</form>
 
 <form method="get" action="/Admin/UserManagement">
     <button type="submit" class="btn btn-success">User Management</button>
@@ -26,10 +59,12 @@ else
 <form method="post" action="/Admin/Logout">
     <button type="submit" class="btn btn-danger">Logout</button>
 </form>
+
 <form method="get" action="/Admin/EditProfile">
     <input type="hidden" name="name" value="@Model.Name" />
     <button type="submit" class="btn btn-primary">Edit Profile</button>
 </form>
+
 <form method="get" action="/Admin/AdminLogs">
     <button type="submit" class="btn btn-info">View Admin Logs</button>
 </form>
