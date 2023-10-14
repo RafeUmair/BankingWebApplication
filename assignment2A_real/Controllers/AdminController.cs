@@ -205,7 +205,7 @@ namespace assignment2A_real.Controllers
                 loggedInAdminName = null;
             }
 
-            return RedirectToAction("Index", "Home"); 
+            return RedirectToAction("Admin", "Home"); 
         }
 
         private void LogAdminAction(string adminName, string action)
