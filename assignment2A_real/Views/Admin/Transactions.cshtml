@@ -1,4 +1,4 @@
-﻿@model List<assignment2A_real.Models.Transaction> 
+﻿@model List<assignment2A_real.Models.Transaction>
 
 @{
     ViewData["Title"] = "Transaction History";
@@ -42,5 +42,7 @@
     </tbody>
 </table>
 
-<a href="@Url.Action("UserManagement")" class="btn btn-secondary">Back</a>
+<a asp-action="Transactions" asp-route-sort="oldest">Filter by Oldest</a>
+<a asp-action="Transactions" asp-route-sort="newest">Filter by Newest</a>
 
+<a href="@Url.Action("UserManagement")" class="btn btn-secondary">Back</a>

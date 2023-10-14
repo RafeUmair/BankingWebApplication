@@ -107,11 +107,11 @@ namespace assignment2A_real.Controllers
              return View("Error");
         }
 
-        public IActionResult Transactions()
+     /*   public IActionResult Transactions()
         {
             List<Transaction> transactions = TransactionManager.GetAllTransactions(); 
             return View("Transactions", transactions);
-        }
+        }*/
 
 
         [HttpGet]
@@ -224,5 +224,23 @@ namespace assignment2A_real.Controllers
         {
             return View(adminlogs);
         }
+
+        public IActionResult Transactions(string sort)
+        {
+            List<Transaction> transactions = TransactionManager.GetAllTransactions();
+
+            if (sort == "oldest")
+            {
+                transactions = transactions.OrderBy(t => t.Date).ToList();
+            }
+            else if (sort == "newest")
+            {
+                transactions = transactions.OrderByDescending(t => t.Date).ToList();
+            }
+
+            return View("Transactions", transactions);
+        }
+
+
     }
 }
