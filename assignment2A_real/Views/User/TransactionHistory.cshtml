@@ -1,4 +1,4 @@
-﻿@model List<Transaction>
+﻿@model List<assignment2A_real.Models.Transaction>
 
 @{
     ViewData["Title"] = "Transaction History";
@@ -6,38 +6,41 @@
 
 <style>
     .table-spacing th {
-        padding: 8px; 
+        padding: 15px;
     }
 
     .table-spacing td {
-        padding: 8px; 
+        padding: 15px;
     }
 </style>
 
 <h1>@ViewData["Title"]</h1>
 
-<p></p>
-@if (Model != null && Model.Count > 0)
-{
-    <p>Account Number: @Model[0].AcctNo</p>
-    <table class="table-spacing">
+<table>
+    <thead>
         <tr>
             <th>Transaction ID</th>
             <th>Amount</th>
+            <th>Account Number</th>
             <th>Type</th>
+            <th>Date</th>
+            <th>Description</th>
         </tr>
+    </thead>
+    <tbody>
         @foreach (var transaction in Model)
         {
             <tr>
                 <td>@transaction.TransactionId</td>
-                <td>@transaction.Amount</td>
+                <td>$@transaction.Amount</td>
+                <td>@transaction.AcctNo</td>
                 <td>@transaction.Type</td>
+                <td>@transaction.Date</td>
+                <td>@transaction.Description</td>
             </tr>
         }
-    </table>
-}
+    </tbody>
+</table>
 
-else
-{
-    <p>No transactions found for the specified account.</p>
-}
+<a asp-action="TransactionHistory" asp-route-acctNo="@Model.First().AcctNo" asp-route-sort="oldest">Filter by Oldest</a>
+<a asp-action="TransactionHistory" asp-route-acctNo="@Model.First().AcctNo" asp-route-sort="newest">Filter by Newest</a>

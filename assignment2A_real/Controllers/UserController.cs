@@ -81,9 +81,19 @@ namespace assignment2A_real.Controllers
             return View("Error");
         }
 
-        public IActionResult TransactionHistory(int acctNo)
+        public IActionResult TransactionHistory(int acctNo, string sort)
         {
-            List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);   
+            List<Transaction> transactions = TransactionManager.GetTransactionsByAcctNo(acctNo);
+
+            if (sort == "oldest")
+            {
+                transactions = transactions.OrderBy(t => t.Date).ToList();
+            }
+            else if (sort == "newest")
+            {
+                transactions = transactions.OrderByDescending(t => t.Date).ToList();
+            }
+
             return View("TransactionHistory", transactions);
         }
 
@@ -110,7 +120,7 @@ namespace assignment2A_real.Controllers
         }
 
         [HttpPost]
-        public IActionResult Send(int sourceAcctNo, int destinationAcctNo, decimal amount)
+        public IActionResult Send(int sourceAcctNo, int destinationAcctNo, decimal amount, string description)
         {
             if (amount <= 0)
             {
@@ -122,9 +132,9 @@ namespace assignment2A_real.Controllers
                 return NotFound("One or more accounts not found.");
             }
 
-            TransactionManager.SendFunds(sourceAcctNo, destinationAcctNo, amount);
+            TransactionManager.SendFunds(sourceAcctNo, destinationAcctNo, amount, description); 
             UserProfile userProfile = UserProfileManager.GetUserProfileByAcctNo(sourceAcctNo);
             return View("LoggedInUser", userProfile);
-        }
+        }       
     }
 }

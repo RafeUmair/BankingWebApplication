@@ -99,7 +99,6 @@ namespace assignment2A_real.Controllers
         public IActionResult Transactions()
         {
             List<Transaction> transactions = TransactionManager.GetAllTransactions(); 
-
             return View("Transactions", transactions);
         }
 

@@ -6,8 +6,10 @@ namespace assignment2A_real.Models
     public class Transaction
     {
         [Key]
-        public int TransactionId { get; set; } 
+        public int TransactionId { get; set; }
         public decimal Amount { get; set; }
+        public DateTime Date { get; set; } 
+        public string? Description { get; set; }
 
         [ForeignKey("Account")]
         public int AcctNo { get; set; }

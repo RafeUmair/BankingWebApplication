@@ -106,7 +106,7 @@ namespace assignment2A_real.Controllers
             };
 
             TransactionManager.InsertTransaction(withdrawalTransaction);
-           account.TransactionId = withdrawalTransaction.TransactionId;
+            account.TransactionId = withdrawalTransaction.TransactionId;
             AccountManager.UpdateAccount(account.AcctNo, account);
             return Ok($"Withdrawn {transaction.Amount:C} from account {transaction.AcctNo}. New balance: {account.Bal:C}");
         }
