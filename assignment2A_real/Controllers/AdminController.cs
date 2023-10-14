@@ -47,8 +47,6 @@ namespace assignment2A_real.Controllers
                 loggedInAdminName = userProfile.Name;
                 return View("LoggedInAdmin", userProfile);
             }
-           // LogAdminAction(userProfile.Name, "Admin Failed Login");
-
             return NotFound();
         }
 
@@ -181,6 +179,7 @@ namespace assignment2A_real.Controllers
                 Account account = AccountManager.GetAccountByAcctNo(accountNumber);
                 if (account != null)
                 {
+                    LogAdminAction(loggedInAdminName, "Searched for Account Number: " + account.AcctNo);
                     searchResults.Add(account); 
                 }
             } 
@@ -189,11 +188,24 @@ namespace assignment2A_real.Controllers
                 UserProfile profile = UserProfileManager.GetUserProfileByUsername(search);
                 if (profile != null)
                 {
+                    LogAdminAction(loggedInAdminName, "Searched for User Profile: " + profile.Name);
                     searchResults.Add(profile); 
                 }
             }
             return View("SearchResultsView", searchResults);
 
+        }
+
+        [HttpPost]
+        public IActionResult Logout()
+        {
+            if (!string.IsNullOrEmpty(loggedInAdminName))
+            {
+                LogAdminAction(loggedInAdminName, "Admin Logged Out");
+                loggedInAdminName = null;
+            }
+
+            return RedirectToAction("Index", "Home"); 
         }
 
         private void LogAdminAction(string adminName, string action)
