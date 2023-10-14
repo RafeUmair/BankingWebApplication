@@ -1,4 +1,4 @@
-﻿@model List<object>  
+﻿@model List<object>
 
 <h2>Search Results</h2>
 
@@ -32,4 +32,6 @@ else
             <p><strong>Picture:</strong> @userProfile.Picture</p>
         }
     }
+
+    <a href="@Url.Action("UserManagement")" class="btn btn-secondary">Back</a>
 }
