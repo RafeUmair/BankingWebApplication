@@ -18,14 +18,12 @@ namespace assignment2A_real.Data
                 {
                     connection.Open();
 
-                    // Enable foreign key constraints
                     using (SQLiteCommand pragmaCommand = connection.CreateCommand())
                     {
                         pragmaCommand.CommandText = "PRAGMA foreign_keys = ON;";
                         pragmaCommand.ExecuteNonQuery();
                     }
 
-                    // Create the Account table
                     using (SQLiteCommand accountCommand = connection.CreateCommand())
                     {
                         accountCommand.CommandText = @"
@@ -82,7 +80,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Check if an account with the same AcctNo already exists
                         command.CommandText = "SELECT COUNT(*) FROM Account WHERE AcctNo = @AcctNo";
                         command.Parameters.AddWithValue("@AcctNo", account.AcctNo);
                         int existingAccountCount = Convert.ToInt32(command.ExecuteScalar());
@@ -90,10 +87,9 @@ namespace assignment2A_real.Data
                         if (existingAccountCount > 0)
                         {
                             Console.WriteLine($"An account with AcctNo {account.AcctNo} already exists.");
-                            return; // Handle the duplicate account entry as needed
+                            return; 
                         }
 
-                        // Insert the new account
                         command.CommandText = @"
                             INSERT INTO Account (AcctNo, Bal, Pin, Fname, Lname)
                             VALUES (@AcctNo, @Bal, @Pin, @Fname, @Lname)";
@@ -208,7 +204,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Delete all accounts from the Account table
                         command.CommandText = "DELETE FROM Account";
                         command.ExecuteNonQuery();
                     }
@@ -231,7 +226,6 @@ namespace assignment2A_real.Data
 
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
-                    // Check if an account with the given AcctNo exists
                     command.CommandText = "SELECT COUNT(*) FROM Account WHERE AcctNo = @AcctNo";
                     command.Parameters.AddWithValue("@AcctNo", acctNo);
                     int accountCount = Convert.ToInt32(command.ExecuteScalar());
@@ -255,7 +249,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Retrieve all accounts from the Account table
                         command.CommandText = "SELECT * FROM Account";
                         using (SQLiteDataReader reader = command.ExecuteReader())
                         {
@@ -270,7 +263,6 @@ namespace assignment2A_real.Data
                                     Lname = reader.GetString(reader.GetOrdinal("Lname"))
 
                                 };
-                             //   account.Transactions = GetTransactionsForAccount(account.AcctNo);
                                 accounts.Add(account);
                             }
                         }
@@ -308,7 +300,6 @@ namespace assignment2A_real.Data
 
                 using (SQLiteCommand command = connection.CreateCommand())
                 {
-                    // Retrieve an account by AcctNo
                     command.CommandText = "SELECT * FROM Account WHERE AcctNo = @AcctNo";
                     command.Parameters.AddWithValue("@AcctNo", acctNo);
 

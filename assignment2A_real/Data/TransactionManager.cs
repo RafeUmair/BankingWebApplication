@@ -428,6 +428,15 @@ namespace assignment2A_real.Data
             }       
             return null;
         }
+        public static Transaction GetTransactionById(int transactionId)
+        {
+            List<Transaction> allTransactions = GetAllTransactions();
+
+            Transaction foundTransaction = allTransactions.FirstOrDefault(t => t.TransactionId == transactionId);
+
+            return foundTransaction;
+        }
+
 
 
     }

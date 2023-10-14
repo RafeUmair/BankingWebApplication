@@ -19,10 +19,8 @@ namespace assignment2A_real.Data
                 {
                     connection.Open();
 
-                    // Create a new SQLite command to execute SQL
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // SQL command to create the UserProfile table
                         command.CommandText = @"
                         CREATE TABLE UserProfile (
                         Name TEXT PRIMARY KEY,
@@ -34,7 +32,7 @@ namespace assignment2A_real.Data
                         Type TEXT,
                         AccountNo INTEGER -- Add Accounts column
                         )";
-                        // Execute the SQL command to create the table
+
                         command.ExecuteNonQuery();
                         connection.Close();
                     }
@@ -45,7 +43,7 @@ namespace assignment2A_real.Data
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.Message);
-                return false; // Create table failed
+                return false; 
             }
         }
             public static void LoadSampleUserProfileData()
@@ -142,7 +140,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Select all user profiles
                         command.CommandText = "SELECT * FROM UserProfile";
 
                         using (SQLiteDataReader reader = command.ExecuteReader())
@@ -158,7 +155,7 @@ namespace assignment2A_real.Data
                                     Picture = reader["Picture"].ToString(),
                                     Password = reader["Password"].ToString(),
                                     Type = reader["Type"].ToString(),
-                                    AcctNo = Convert.ToInt32(reader["AccountNo"]) // Parse "Accounts" as an integer
+                                    AcctNo = Convert.ToInt32(reader["AccountNo"]) 
 
                                 };
 
@@ -257,7 +254,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Delete all user profiles from the "UserProfile" table
                         command.CommandText = "DELETE FROM UserProfile";
                         command.ExecuteNonQuery();
                     }
@@ -281,7 +277,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Retrieve user profile by username
                         command.CommandText = "SELECT * FROM UserProfile WHERE Name = @Username";
                         command.Parameters.AddWithValue("@Username", username);
 
@@ -326,7 +321,6 @@ namespace assignment2A_real.Data
 
                     using (SQLiteCommand command = connection.CreateCommand())
                     {
-                        // Retrieve user profile by email
                         command.CommandText = "SELECT * FROM UserProfile WHERE Email = @Email";
                         command.Parameters.AddWithValue("@Email", email);
 

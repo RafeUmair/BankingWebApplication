@@ -12,7 +12,6 @@ namespace assignment2A_real.Controllers
         [HttpGet("/api/Transactions")]
         public IActionResult GetAllTransactions()
         {
-            // Retrieve all transactions from your data source
             List<Transaction> transactions = TransactionManager.GetAllTransactions();
 
               if (transactions.Count == 0)

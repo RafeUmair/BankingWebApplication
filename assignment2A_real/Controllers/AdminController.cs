@@ -107,13 +107,6 @@ namespace assignment2A_real.Controllers
              return View("Error");
         }
 
-     /*   public IActionResult Transactions()
-        {
-            List<Transaction> transactions = TransactionManager.GetAllTransactions(); 
-            return View("Transactions", transactions);
-        }*/
-
-
         [HttpGet]
         public IActionResult EditSelectProfile(string name)
         {
@@ -241,6 +234,21 @@ namespace assignment2A_real.Controllers
             return View("Transactions", transactions);
         }
 
+        [HttpGet]
+
+        public IActionResult TransactionDetails([FromQuery] int transactionId)
+        {
+            Transaction transaction = TransactionManager.GetTransactionById(transactionId);
+
+            if (transaction != null)
+            {
+                return View("SearchedTransaction", transaction);
+            }
+            else
+            {
+                return View("Error", new ErrorViewModel { RequestId = "Transaction Not found" });
+            }
+        }
 
     }
 }

@@ -45,4 +45,12 @@
 <a asp-action="Transactions" asp-route-sort="oldest">Filter by Oldest</a>
 <a asp-action="Transactions" asp-route-sort="newest">Filter by Newest</a>
 
+
+<form method="get" action="/Admin/TransactionDetails">
+    <label for="transactionId">Enter Transaction ID: </label>
+    <input type="text" id="transactionId" name="transactionId" required />
+    <button type="submit" class="btn btn-primary">View Transaction</button>
+</form>
+
+
 <a href="@Url.Action("UserManagement")" class="btn btn-secondary">Back</a>

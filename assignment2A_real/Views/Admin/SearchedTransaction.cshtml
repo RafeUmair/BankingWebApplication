@@ -1,0 +1,36 @@
+﻿@model assignment2A_real.Models.Transaction
+
+@{
+    ViewData["Title"] = "TransactionDetails";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <tr>
+        <th>Transaction ID</th>
+        <td>@Model.TransactionId</td>
+    </tr>
+    <tr>
+        <th>Amount</th>
+        <td>$@Model.Amount</td>
+    </tr>
+    <tr>
+        <th>Account Number</th>
+        <td>@Model.AcctNo</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>@Model.Type</td>
+    </tr>
+    <tr>
+        <th>Date</th>
+        <td>@Model.Date</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>@Model.Description</td>
+    </tr>
+</table>
+
+<a href="@Url.Action("Transactions")" class="btn btn-secondary">Back to Transaction History</a>

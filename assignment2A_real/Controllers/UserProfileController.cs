@@ -21,17 +21,14 @@ namespace assignment2A_real.Controllers
         [Route("createUserProfile")]
         public IActionResult CreateUserProfile(UserProfile userProfile)
         {
-            // Insert the user profile into the database using UserProfileManager
             UserProfileManager.InsertUserProfile(userProfile);
 
-            // Return a success response or appropriate status code
             return Ok("User profile created successfully.");
         }
 
         [HttpGet("{username}")]
         public IActionResult GetUserProfileByUsername(string username)
         {
-            // Retrieve user profile by username using UserProfileManager
             var userProfile = UserProfileManager.GetUserProfileByUsername(username);
 
             if (userProfile == null)
@@ -39,14 +36,12 @@ namespace assignment2A_real.Controllers
                 return NotFound("User profile not found.");
             }
 
-            // Return the user profile as a response
             return Ok(userProfile);
         }
 
         [HttpGet("byemail/{email}")]
         public IActionResult GetUserProfileByEmail(string email)
         {
-            // Retrieve user profile by email using UserProfileManager
             var userProfile = UserProfileManager.GetUserProfileByEmail(email);
 
             if (userProfile == null)
@@ -54,7 +49,6 @@ namespace assignment2A_real.Controllers
                 return NotFound("User profile not found.");
             }
 
-            // Return the user profile as a response
             return Ok(userProfile);
         }
 
