@@ -6,8 +6,12 @@ using System.Xml.Linq;
 
 namespace assignment2A_real.Controllers
 {
+
     public class AdminController : Controller
     {
+        private static List<AdminLog> adminlogs = new List<AdminLog>();
+        private static String loggedInAdminName;
+
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
@@ -18,6 +22,7 @@ namespace assignment2A_real.Controllers
                 if (password == userProfile.Password)
                 {
                     TempData["Message"] = userProfile.Name;
+
                     return RedirectToAction("LoggedIn", new { username = userProfile.Name });
                 }
             }
@@ -38,8 +43,11 @@ namespace assignment2A_real.Controllers
 
             if (userProfile != null)
             {
+                LogAdminAction(userProfile.Name, "Admin Logged In");
+                loggedInAdminName = userProfile.Name;
                 return View("LoggedInAdmin", userProfile);
             }
+           // LogAdminAction(userProfile.Name, "Admin Failed Login");
 
             return NotFound();
         }
@@ -52,6 +60,7 @@ namespace assignment2A_real.Controllers
         public IActionResult UserManagement()
         {
             var userProfiles = UserProfileManager.GetAllUserProfiles();
+            LogAdminAction(loggedInAdminName, "Viewed User Management");
             return View("UserManagement", userProfiles);
         }
 
@@ -62,6 +71,8 @@ namespace assignment2A_real.Controllers
 
             if (userProfile != null)
             {
+                LogAdminAction(loggedInAdminName, "Viewed Edit Profile for self");
+
                 return View("EditProfile", userProfile);
             }
 
@@ -74,6 +85,7 @@ namespace assignment2A_real.Controllers
             if (userProfile != null)
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
+                LogAdminAction(loggedInAdminName, "Updated Self Profile " );
 
                 return View("LoggedInAdmin", userProfile);
             }
@@ -89,6 +101,7 @@ namespace assignment2A_real.Controllers
 
             if ((userProfile != null))
             {
+                LogAdminAction(loggedInAdminName, "Deactivated User: " + userProfile.Name);
                 UserProfileManager.DeleteUserProfile(userProfile.Name); 
 
                 return View("UserDeactivated", userProfile.Name);
@@ -110,6 +123,7 @@ namespace assignment2A_real.Controllers
 
             if (userProfile != null)
             {
+                LogAdminAction(loggedInAdminName, "Viewed Edit Select Profile for USER : " + userProfile.Name);
                 return View("EditSelectProfile", userProfile);
             }
 
@@ -122,7 +136,8 @@ namespace assignment2A_real.Controllers
             if (userProfile != null)
             {
                 UserProfileManager.UpdateUserProfile(userProfile.Name, userProfile);
-                List<UserProfile> userProfilelist = UserProfileManager.GetAllUserProfiles().ToList(); 
+                List<UserProfile> userProfilelist = UserProfileManager.GetAllUserProfiles().ToList();
+                LogAdminAction(loggedInAdminName, "Updated Select Profile: " + userProfile.Name);
                 return View("UserManagement", userProfilelist);
             }
 
@@ -139,6 +154,8 @@ namespace assignment2A_real.Controllers
                 {
                     UserProfileManager.InsertUserProfile(userProfile);
                     List<UserProfile> userProfilelist = UserProfileManager.GetAllUserProfiles().ToList();
+                    LogAdminAction(loggedInAdminName, "Created User: " + userProfile.Name);
+
                     return View("UserManagement", userProfilelist);
                 }
                 ViewData["ErrorMessage"] = "AccountNo does not exist";
@@ -177,6 +194,23 @@ namespace assignment2A_real.Controllers
             }
             return View("SearchResultsView", searchResults);
 
+        }
+
+        private void LogAdminAction(string adminName, string action)
+        {
+            var logEntry = new AdminLog
+            {
+                Time = DateTime.Now,
+                AdminName = adminName,
+                Action = action
+            };
+
+            adminlogs.Add(logEntry);
+        }
+
+        public IActionResult AdminLogs()
+        {
+            return View(adminlogs);
         }
     }
 }

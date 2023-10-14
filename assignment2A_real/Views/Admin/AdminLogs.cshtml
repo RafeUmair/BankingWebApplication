@@ -1,0 +1,35 @@
+﻿@model List<AdminLog>
+
+@{
+    ViewData["Title"] = "Admin Logs";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Admin Name</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.Time</td>
+                    <td>@log.AdminName</td>
+                    <td>@log.Action</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No admin logs available.</p>
+}
+
